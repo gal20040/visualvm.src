@@ -302,7 +302,7 @@ public final class GlobalPreferences implements PreferenceChangeListener {
      * @since VisualVM 1.3.9
      */
     public void setDoNotShowAgain(String key, String value) {
-        ProfilerIDESettings.getInstance().setDoNotShowAgain(key, value);
+//        ProfilerIDESettings.getInstance().setDoNotShowAgain(key, value);
     }
 
     /**
@@ -315,7 +315,8 @@ public final class GlobalPreferences implements PreferenceChangeListener {
      * @since VisualVM 1.3.9
      */
     public String getDoNotShowAgain(String key) {
-        return ProfilerIDESettings.getInstance().getDoNotShowAgain(key);
+        return "";
+//        return ProfilerIDESettings.getInstance().getDoNotShowAgain(key);
     }
     
 }

@@ -35,7 +35,9 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 
-    
+import static javax.swing.Action.SMALL_ICON;
+
+
 /**
  *
  * @author Jiri Sedlacek

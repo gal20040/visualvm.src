@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-profiler_visualvm">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-profiler_visualvm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-profiler_visualvm.jar!/" recursive="false" />
+  </library>
+</component>

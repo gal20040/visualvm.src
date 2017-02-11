@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-autoupdate-services-RELEASE80">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-autoupdate-services-RELEASE80.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

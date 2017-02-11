@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-apisupport-project">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-apisupport-project.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

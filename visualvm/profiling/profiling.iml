@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://profiling/out" />
+    <output-test url="file://profiling/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="library" name="org-netbeans-lib-profiler-RELEASE82" level="project" />
+    <orderEntry type="library" name="org-netbeans-modules-profiler" level="project" />
+    <orderEntry type="library" name="org-openide-filesystems" level="project" />
+    <orderEntry type="library" name="org-openide-awt" level="project" />
+    <orderEntry type="library" name="org-openide-windows" level="project" />
+    <orderEntry type="module" module-name="application" />
+    <orderEntry type="library" name="org-netbeans-api-progress" level="project" />
+    <orderEntry type="library" name="org-netbeans-modules-profiler-api-RELEASE82" level="project" />
+    <orderEntry type="module" module-name="uisupport" />
+    <orderEntry type="library" name="org-netbeans-lib-profiler-common" level="project" />
+    <orderEntry type="library" name="org-openide-util-lookup" level="project" />
+    <orderEntry type="library" name="org-netbeans-modules-options-api" level="project" />
+    <orderEntry type="library" name="org-openide-modules" level="project" />
+    <orderEntry type="library" name="org-openide-nodes" level="project" />
+  </component>
+</module>

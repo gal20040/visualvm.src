@@ -24,6 +24,7 @@
  */
 
 package com.sun.tools.visualvm.core.scheduler;
+import static org.junit.Assert.assertEquals;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

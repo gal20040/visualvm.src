@@ -2,6 +2,56 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/visualvm/antsrc/antsrc.iml" filepath="$PROJECT_DIR$/visualvm/antsrc/antsrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/templates/apisupport/apisupport.iml" filepath="$PROJECT_DIR$/templates/apisupport/apisupport.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/application/application.iml" filepath="$PROJECT_DIR$/visualvm/application/application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/applicationviews/applicationviews.iml" filepath="$PROJECT_DIR$/visualvm/applicationviews/applicationviews.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/apptype/apptype.iml" filepath="$PROJECT_DIR$/samples/apptype/apptype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/appui/appui.iml" filepath="$PROJECT_DIR$/visualvm/appui/appui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/attach/attach.iml" filepath="$PROJECT_DIR$/visualvm/attach/attach.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/branding/branding.iml" filepath="$PROJECT_DIR$/visualvm/branding/branding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/btrace/btrace.iml" filepath="$PROJECT_DIR$/plugins/btrace/btrace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/buffermonitor/buffermonitor.iml" filepath="$PROJECT_DIR$/plugins/buffermonitor/buffermonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/charts/charts.iml" filepath="$PROJECT_DIR$/visualvm/charts/charts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/consumervisualvm/consumervisualvm.iml" filepath="$PROJECT_DIR$/plugins/consumervisualvm/consumervisualvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/core/core.iml" filepath="$PROJECT_DIR$/visualvm/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/coredump/coredump.iml" filepath="$PROJECT_DIR$/visualvm/coredump/coredump.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/datasource/datasource.iml" filepath="$PROJECT_DIR$/samples/datasource/datasource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/extapptypes/extapptypes.iml" filepath="$PROJECT_DIR$/plugins/extapptypes/extapptypes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/extapptypes.lib/extapptypes.lib.iml" filepath="$PROJECT_DIR$/plugins/extapptypes.lib/extapptypes.lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/extensions/extensions.iml" filepath="$PROJECT_DIR$/plugins/extensions/extensions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/filtersortsample/filtersortsample.iml" filepath="$PROJECT_DIR$/samples/filtersortsample/filtersortsample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/glassfish/glassfish.iml" filepath="$PROJECT_DIR$/plugins/glassfish/glassfish.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/heapdump/heapdump.iml" filepath="$PROJECT_DIR$/visualvm/heapdump/heapdump.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/hellovvm/hellovvm.iml" filepath="$PROJECT_DIR$/samples/hellovvm/hellovvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/host/host.iml" filepath="$PROJECT_DIR$/visualvm/host/host.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/hostcompare/hostcompare.iml" filepath="$PROJECT_DIR$/samples/hostcompare/hostcompare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/hostviews/hostviews.iml" filepath="$PROJECT_DIR$/visualvm/hostviews/hostviews.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/jconsole/jconsole.iml" filepath="$PROJECT_DIR$/plugins/jconsole/jconsole.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/jmx/jmx.iml" filepath="$PROJECT_DIR$/visualvm/jmx/jmx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/jsyntaxpane-lib/jsyntaxpane-lib.iml" filepath="$PROJECT_DIR$/plugins/jsyntaxpane-lib/jsyntaxpane-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/jvm/jvm.iml" filepath="$PROJECT_DIR$/visualvm/jvm/jvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/jvmcap/jvmcap.iml" filepath="$PROJECT_DIR$/samples/jvmcap/jvmcap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/jvmstat/jvmstat.iml" filepath="$PROJECT_DIR$/visualvm/jvmstat/jvmstat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/killapp/killapp.iml" filepath="$PROJECT_DIR$/samples/killapp/killapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/mbeans/mbeans.iml" filepath="$PROJECT_DIR$/plugins/mbeans/mbeans.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/pluggableViewDemoSuite/pluggableViewDemoSuite.iml" filepath="$PROJECT_DIR$/samples/pluggableViewDemoSuite/pluggableViewDemoSuite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/profiler/profiler.iml" filepath="$PROJECT_DIR$/visualvm/profiler/profiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/profiling/profiling.iml" filepath="$PROJECT_DIR$/visualvm/profiling/profiling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/sa/sa.iml" filepath="$PROJECT_DIR$/visualvm/sa/sa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/sampleBundle/sampleBundle.iml" filepath="$PROJECT_DIR$/samples/sampleBundle/sampleBundle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/sampler/sampler.iml" filepath="$PROJECT_DIR$/visualvm/sampler/sampler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/saplugin/saplugin.iml" filepath="$PROJECT_DIR$/plugins/saplugin/saplugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/security/security.iml" filepath="$PROJECT_DIR$/plugins/security/security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/startup/startup.iml" filepath="$PROJECT_DIR$/visualvm/startup/startup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/startupprofiler/startupprofiler.iml" filepath="$PROJECT_DIR$/plugins/startupprofiler/startupprofiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/subnodes/subnodes.iml" filepath="$PROJECT_DIR$/samples/subnodes/subnodes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/systray/systray.iml" filepath="$PROJECT_DIR$/plugins/systray/systray.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/threaddump/threaddump.iml" filepath="$PROJECT_DIR$/visualvm/threaddump/threaddump.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/threadinspect/threadinspect.iml" filepath="$PROJECT_DIR$/plugins/threadinspect/threadinspect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/tools/tools.iml" filepath="$PROJECT_DIR$/visualvm/tools/tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/tracer/tracer.iml" filepath="$PROJECT_DIR$/plugins/tracer/tracer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm/uisupport/uisupport.iml" filepath="$PROJECT_DIR$/visualvm/uisupport/uisupport.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/visualvm.src.iml" filepath="$PROJECT_DIR$/.idea/visualvm.src.iml" />
     </modules>
   </component>

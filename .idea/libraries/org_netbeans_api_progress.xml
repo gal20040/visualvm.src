@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-api-progress">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-api-progress.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="org-openide-filesystems">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-filesystems.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-loaders.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

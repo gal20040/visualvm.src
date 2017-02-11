@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-openide-nodes">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-nodes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-openide-util-lookup">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-util-lookup.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
