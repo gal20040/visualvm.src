@@ -26,6 +26,7 @@
 package com.sun.tools.visualvm.application.views.monitor;
 
 import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.application.views.FileReaderWriter;
 import com.sun.tools.visualvm.core.datasupport.DataRemovedListener;
 import com.sun.tools.visualvm.charts.ChartFactory;
 import com.sun.tools.visualvm.charts.SimpleXYChartDescriptor;
@@ -288,6 +289,8 @@ class ApplicationMonitorView extends DataSourceView {
 
         private SimpleXYChartSupport chartSupport;
 
+        private static final FileReaderWriter fileReaderWriter1 = new FileReaderWriter("cpu_log.txt");
+        private static String outputString1;
 
         public CpuViewSupport(ApplicationMonitorModel model) {
             initModels(model);
@@ -317,7 +320,7 @@ class ApplicationMonitorView extends DataSourceView {
                     model.getProcessGcTime() * 1000000 / processorsCount : -1;
                 long prevProcessGcTime  = tracksProcessGcTime  ?
                     model.getPrevProcessGcTime() * 1000000 / processorsCount : -1;
-
+                
                 if (prevUpTime != -1 && (tracksProcessCpuTime || tracksProcessGcTime)) {
 
                     long upTimeDiff = upTime - prevUpTime;
@@ -345,7 +348,30 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.addValues(model.getTimestamp(), new long[] { Math.max(cpuUsage, 0), Math.max(gcUsage, 0) });
                     chartSupport.updateDetails(new String[] { cpuDetail, gcDetail });
 
+                    outputString1 = "\n" + upTime +
+                            "\t" + prevUpTime +
+                            "\t" + cpuUsage +
+                            "\t" + gcUsage +
+                            "\t" + cpuDetail +
+                            "\t" + gcDetail;
+                    fileReaderWriter1.appendToOutputFile(outputString1);
+                    fileReaderWriter1.close(); //TODO надо ли каждый раз закрывать?
                 }
+                
+                //                    outputString = "upTime = " + upTime +
+//                            "\nprevUpTime = " + prevUpTime +
+//                            "\ncpuUsage = " + cpuUsage +
+//                            "\ngcUsage = " + gcUsage +
+//                            "\ncpuDetail = " + cpuDetail +
+//                            "\ngcDetail = " + gcDetail;
+//                outputString = "\n" + upTime +
+//                        "\t" + prevUpTime +
+//                        "\t" + cpuUsage +
+//                        "\t" + gcUsage +
+//                        "\t" + cpuDetail +
+//                        "\t" + gcDetail;
+//                fileReaderWriter.appendToOutputFile(outputString);
+//                fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
             }
         }
 
@@ -391,6 +417,9 @@ class ApplicationMonitorView extends DataSourceView {
         private String heapName;
 
         private SimpleXYChartSupport chartSupport;
+        
+//        private static final FileReaderWriter fileReaderWriter2 = new FileReaderWriter("heap_log.txt");
+//        private static String outputString2;
 
         public HeapViewSupport(ApplicationMonitorModel model) {
             initModels(model);
@@ -412,6 +441,14 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { chartSupport.formatBytes(heapCapacity),
                                                           chartSupport.formatBytes(heapUsed),
                                                           chartSupport.formatBytes(maxHeap) });
+
+                String outputString2 = "\n" + heapCapacity +
+                    "\t" + heapUsed +
+                    "\t" + maxHeap;
+                FileReaderWriter fileReaderWriter2 = new FileReaderWriter("heap_log.txt");
+
+                fileReaderWriter2.appendToOutputFile(outputString2);
+                fileReaderWriter2.close(); //TODO надо ли каждый раз закрывать?
             }
         }
 
