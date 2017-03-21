@@ -43,6 +43,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,6 +100,12 @@ class ApplicationMonitorView extends DataSourceView {
 
     static void runLogging(String outputFileName) {
         fileReaderWriter = new FileReaderWriter(outputFileName);
+
+        if (getFileSize(new File(outputFileName)) == 0) {
+            String logHeader = logTrigger.getLogHeader(outputFileName);
+            fileReaderWriter.appendToOutputFile(logHeader);
+        }
+
         fileReaderWriter.appendToOutputFile(outputString);
         fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
     }
@@ -117,6 +124,10 @@ class ApplicationMonitorView extends DataSourceView {
      */
     private static long getCurrentDateTimeInMilliSeconds() {
         return getCurrentDateTime().getTime();
+    }
+
+    private static long getFileSize(File file) {
+        return file.length();
     }
 
     protected DataViewComponent createComponent() {
@@ -192,6 +203,14 @@ class ApplicationMonitorView extends DataSourceView {
             int selEnd   = area.getSelectionEnd();
             area.setText(getBasicTelemetry(model));
             area.select(selStart, selEnd);
+
+            if (logTrigger.isLoggingOn()) {
+                outputString = "\n" + getCurrentDateTime() +
+                        "\t" + getCurrentDateTimeInMilliSeconds() +
+                        "\t" + selStart +
+                        "\t" + selEnd;
+                runLogging(LogTrigger.LogName.GENERAL);
+            }
         }
 
         public void dataRemoved(DataSource dataSource) {
@@ -380,7 +399,7 @@ class ApplicationMonitorView extends DataSourceView {
                                 "\t" + gcUsage +
                                 "\t" + cpuDetail +
                                 "\t" + gcDetail;
-                        runLogging("cpu_log.txt"); //TODO вытащить название файла в отдельный файл
+                        runLogging(LogTrigger.LogName.CPU);
                     }
                 }
             }
@@ -451,13 +470,13 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatBytes(maxHeap) });
 
                 if (logTrigger.checkMaxHeap(maxHeap)
-                            || logTrigger.checkUsedHeap(heapUsed)) {
+                        || logTrigger.checkUsedHeap(heapUsed)) {
                     outputString = "\n" + getCurrentDateTime() +
                             "\t" + getCurrentDateTimeInMilliSeconds() +
                             "\t" + heapCapacity +
                             "\t" + heapUsed +
                             "\t" + maxHeap;
-                    runLogging("heap_log.txt"); //TODO вытащить название файла в отдельный файл
+                    runLogging(LogTrigger.LogName.HEAP);
                 }
             }
         }
@@ -612,14 +631,14 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatDecimal(totalUnloaded),
                         chartSupport.formatDecimal(sharedUnloaded) });
 
-                if (logTrigger.IsLoggingOn()) {
+                if (logTrigger.isLoggingOn()) {
                     outputString = "\n" + getCurrentDateTime() +
                             "\t" + getCurrentDateTimeInMilliSeconds() +
-                            "\t" + sharedUnloaded +
-                            "\t" + totalUnloaded +
+                            "\t" + totalClasses +
                             "\t" + sharedClasses +
-                            "\t" + totalClasses;
-                    runLogging("class_log.txt"); //TODO вытащить название файла в отдельный файл
+                            "\t" + totalUnloaded +
+                            "\t" + sharedUnloaded;
+                    runLogging(LogTrigger.LogName.CLASS);
                 }
             }
         }
@@ -703,7 +722,7 @@ class ApplicationMonitorView extends DataSourceView {
                             "\t" + daemonThreads +
                             "\t" + peakThreads +
                             "\t" + startedThreads;
-                    runLogging("thread_log.txt"); //TODO вытащить название файла в отдельный файл
+                    runLogging(LogTrigger.LogName.THREAD);
                 }
             }
         }

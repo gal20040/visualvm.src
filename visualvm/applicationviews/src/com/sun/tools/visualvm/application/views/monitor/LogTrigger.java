@@ -48,7 +48,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (cpu != -1) {
                 state[0] = cpuUsage >= cpu;
-                stateLogging = IsLoggingOn();
+                stateLogging = isLoggingOn();
             }
                 return stateLogging;
         }
@@ -60,7 +60,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (this.maxHeap != -1) {
                 state[1] = maxHeap >= this.maxHeap;
-                stateLogging = IsLoggingOn();
+                stateLogging = isLoggingOn();
             }
             return stateLogging;
         }
@@ -72,7 +72,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (heapUsed != -1) {
                 state[2] = usedHeap >= heapUsed;
-                stateLogging = IsLoggingOn();
+                stateLogging = isLoggingOn();
             }
             return stateLogging;
         }
@@ -84,14 +84,52 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (this.threads != -1) {
                 state[3] = threads >= this.threads;
-                stateLogging = IsLoggingOn();
+                stateLogging = isLoggingOn();
             }
             return stateLogging;
         }
         else return false;
     }
 
-    public boolean IsLoggingOn(){
+    public boolean isLoggingOn(){
         return state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+    }
+
+    public String getLogHeader(String outputFileName) {
+        String logHeader = "Date/time" +
+                "\t" + "Date/time in milliseconds";
+
+        if (outputFileName.equals(LogName.CLASS))
+            logHeader = logHeader +
+                    "\t" + "Total classes" +
+                    "\t" + "Shared classes" +
+                    "\t" + "Total unloaded classes" +
+                    "\t" + "Shared unloaded classes";
+        else if (outputFileName.equals(LogName.CPU))
+            logHeader = logHeader +
+                    "\t" + "upTime" +
+                    "\t" + "prevUpTime" +
+                    "\t" + "CPU usage" +
+                    "\t" + "GC usage" +
+                    "\t" + "CPU detail" +
+                    "\t" + "GC detail";
+        else if (outputFileName.equals(LogName.GENERAL))
+            logHeader = logHeader +
+                    "\t" + "selStart" +
+                    "\t" + "selEnd";
+        else if (outputFileName.equals(LogName.HEAP))
+            logHeader = logHeader +
+                    "\t" + "Heap capacity" +
+                    "\t" + "Heap used" +
+                    "\t" + "Max heap";
+        else if (outputFileName.equals(LogName.OVERVIEW))
+            logHeader = "";
+        else if (outputFileName.equals(LogName.THREAD))
+            logHeader = logHeader +
+                    "\t" + "Total threads" +
+                    "\t" + "Daemon threads" +
+                    "\t" + "Peak threads" +
+                    "\t" + "Started threads";
+        return logHeader;
     }
 }
