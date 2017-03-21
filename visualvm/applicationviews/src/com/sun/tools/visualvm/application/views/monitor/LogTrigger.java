@@ -1,6 +1,9 @@
 package com.sun.tools.visualvm.application.views.monitor;
 
+import com.sun.tools.visualvm.application.views.FileReaderWriter;
+
 import java.io.*;
+import java.util.Date;
 
 public class LogTrigger implements ILogTrigger{
 
@@ -132,5 +135,21 @@ public class LogTrigger implements ILogTrigger{
                     "\t" + "Peak threads" +
                     "\t" + "Started threads";
         return logHeader;
+    }
+
+    void runLogging(FileReaderWriter fileReaderWriter, String outputFileName, String outputString) {
+        fileReaderWriter = new FileReaderWriter(outputFileName);
+
+        if (getFileSize(new File(outputFileName)) == 0) {
+            String logHeader = getLogHeader(outputFileName);
+            fileReaderWriter.appendToOutputFile(logHeader);
+        }
+
+        fileReaderWriter.appendToOutputFile(outputString);
+        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
+    }
+
+    private static long getFileSize(File file) {
+        return file.length();
     }
 }
