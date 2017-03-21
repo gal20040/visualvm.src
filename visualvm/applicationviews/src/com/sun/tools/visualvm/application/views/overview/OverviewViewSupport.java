@@ -29,6 +29,7 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.application.snapshot.ApplicationSnapshot;
+import com.sun.tools.visualvm.application.views.monitor.LogTrigger;
 import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptor;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptorFactory;
@@ -107,12 +108,15 @@ class OverviewViewSupport {
         
         private String getGeneralProperties(ApplicationOverviewModel model) {
             StringBuilder data = new StringBuilder();
+            String output = new String();
             
             // Application information
             String PID = NbBundle.getMessage(OverviewViewSupport.class, "LBL_PID"); // NOI18N
             String HOST = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Host");   // NOI18N
             data.append("<b>"+PID+":</b> " + model.getPid() + "<br>");  // NOI18N
+            output+=PID+": "+model.getPid()+"\n";
             data.append("<b>"+HOST+":</b> " + model.getHostName() + "<br>");    // NOI18N
+            output+=HOST+": " + model.getHostName() + "\n";
             
             if (model.basicInfoSupported()) {
                 String MAIN_CLASS = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Main_class");   // NOI18N
@@ -125,31 +129,43 @@ class OverviewViewSupport {
                 String JVM_FLAGS = NbBundle.getMessage(OverviewViewSupport.class, "LBL_JVM_Flags"); // NOI18N
                 String HEAP_DUMP_OOME = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Heap_dump_on_OOME");    // NOI18N
                 data.append("<b>"+MAIN_CLASS+":</b> " + model.getMainClass() + "<br>"); // NOI18N
+                output+=MAIN_CLASS+": " + model.getMainClass() + "\n";
                 data.append("<b>"+ARGS+":</b> " + model.getMainArgs() + "<br>");    // NOI18N
-                
+                output+=ARGS+": " + model.getMainArgs() + "\n\n";
+
                 data.append("<br>");    // NOI18N
                 data.append("<b>"+JVM+":</b> " + model.getVmId() + "<br>"); // NOI18N
+                output+=JVM+": " + model.getVmId() + "\n";
                 String javaVersion = model.getJavaVersion();
                 String javaVendor = model.getJavaVendor();
                 if (javaVersion != null || javaVendor != null) {
                     data.append("<b>"+JAVA+":</b>");
+                    output+=JAVA+":\n";
                     if (javaVersion != null) {
                         data.append(" "+JAVA_VERSION+" " + javaVersion);   // NOI18N
+                        output+="   "+JAVA_VERSION+" " + javaVersion;
                     }
                     if (javaVendor != null) {
-                        if (javaVersion != null) data.append(",");
+                        if (javaVersion != null){
+                            data.append(",");
+                            output+=", ";
+                        }
                         data.append(" "+JAVA_VENDOR+" " + javaVendor);   // NOI18N
+                        output+=JAVA_VENDOR+" " + javaVendor +"\n";
                     }
                     data.append("<br>");
                 }
                 data.append("<b>"+JAVA_HOME+":</b> " + model.getJavaHome() + "<br>");   // NOI18N
+                output+=JAVA_HOME+": " + model.getJavaHome() + "\n";
                 data.append("<b>"+JVM_FLAGS+":</b> " + model.getJvmFlags() + "<br><br>");   // NOI18N
+                output+=JVM_FLAGS+": " + model.getJvmFlags() + "\n";
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
+                output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n";
             }
-            File out = new File("general_log.txt");
+            File out = new File(LogTrigger.LogName.OVERVIEW);
             try {
                 PrintWriter writer = new PrintWriter(out.getAbsoluteFile());
-                writer.print(data.toString());
+                writer.print(output);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
