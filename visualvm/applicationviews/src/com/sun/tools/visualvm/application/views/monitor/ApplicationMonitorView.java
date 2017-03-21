@@ -98,17 +98,17 @@ class ApplicationMonitorView extends DataSourceView {
         return model;
     }
 
-    static void runLogging(String outputFileName) {
-        fileReaderWriter = new FileReaderWriter(outputFileName);
-
-        if (getFileSize(new File(outputFileName)) == 0) {
-            String logHeader = logTrigger.getLogHeader(outputFileName);
-            fileReaderWriter.appendToOutputFile(logHeader);
-        }
-
-        fileReaderWriter.appendToOutputFile(outputString);
-        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
-    }
+//    static void runLogging(String outputFileName) {
+//        fileReaderWriter = new FileReaderWriter(outputFileName);
+//
+//        if (getFileSize(new File(outputFileName)) == 0) {
+//            String logHeader = logTrigger.getLogHeader(outputFileName);
+//            fileReaderWriter.appendToOutputFile(logHeader);
+//        }
+//
+//        fileReaderWriter.appendToOutputFile(outputString);
+//        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
+//    }
 
     /**
      * Returns current date and time.
@@ -126,9 +126,9 @@ class ApplicationMonitorView extends DataSourceView {
         return getCurrentDateTime().getTime();
     }
 
-    private static long getFileSize(File file) {
-        return file.length();
-    }
+//    private static long getFileSize(File file) {
+//        return file.length();
+//    }
 
     protected DataViewComponent createComponent() {
         final MasterViewSupport masterViewSupport = new MasterViewSupport(model);
@@ -209,7 +209,7 @@ class ApplicationMonitorView extends DataSourceView {
                         "\t" + getCurrentDateTimeInMilliSeconds() +
                         "\t" + selStart +
                         "\t" + selEnd;
-                runLogging(LogTrigger.LogName.GENERAL);
+                logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.GENERAL, outputString);
             }
         }
 
@@ -399,7 +399,7 @@ class ApplicationMonitorView extends DataSourceView {
                                 "\t" + gcUsage +
                                 "\t" + cpuDetail +
                                 "\t" + gcDetail;
-                        runLogging(LogTrigger.LogName.CPU);
+                        logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.CPU, outputString);
                     }
                 }
             }
@@ -476,7 +476,7 @@ class ApplicationMonitorView extends DataSourceView {
                             "\t" + heapCapacity +
                             "\t" + heapUsed +
                             "\t" + maxHeap;
-                    runLogging(LogTrigger.LogName.HEAP);
+                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.HEAP, outputString);
                 }
             }
         }
@@ -638,7 +638,7 @@ class ApplicationMonitorView extends DataSourceView {
                             "\t" + sharedClasses +
                             "\t" + totalUnloaded +
                             "\t" + sharedUnloaded;
-                    runLogging(LogTrigger.LogName.CLASS);
+                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.CLASS, outputString);
                 }
             }
         }
@@ -722,7 +722,7 @@ class ApplicationMonitorView extends DataSourceView {
                             "\t" + daemonThreads +
                             "\t" + peakThreads +
                             "\t" + startedThreads;
-                    runLogging(LogTrigger.LogName.THREAD);
+                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.THREAD, outputString);
                 }
             }
         }
