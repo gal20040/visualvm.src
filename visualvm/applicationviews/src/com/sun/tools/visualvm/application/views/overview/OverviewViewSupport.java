@@ -157,7 +157,7 @@ class OverviewViewSupport {
                 data.append("<b>"+JVM_FLAGS+":</b> " + model.getJvmFlags() + "<br><br>");   // NOI18N
                 output+=JVM_FLAGS+": " + model.getJvmFlags() + "\n";
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
-                output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n ";
+                output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n\n";
             }
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
             fileReaderWriter.appendToOutputFile(output);
@@ -310,7 +310,8 @@ class OverviewViewSupport {
             setOpaque(false);
 
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
-            fileReaderWriter.appendToOutputFile(jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
+            fileReaderWriter.appendToOutputFile("   JVM Arguments: \n");
+            fileReaderWriter.appendToOutputFile(jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n")+"\n\n");
             fileReaderWriter.close();
 
             JComponent contents;
@@ -347,6 +348,7 @@ class OverviewViewSupport {
             setOpaque(false);
 
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
+            fileReaderWriter.appendToOutputFile("   System Properties : \n");
             fileReaderWriter.appendToOutputFile(properties.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
             fileReaderWriter.close();
 
