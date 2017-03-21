@@ -160,7 +160,7 @@ class OverviewViewSupport {
                 data.append("<b>"+JVM_FLAGS+":</b> " + model.getJvmFlags() + "<br><br>");   // NOI18N
                 output+=JVM_FLAGS+": " + model.getJvmFlags() + "\n";
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
-                output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n";
+                output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n ";
             }
             File out = new File(LogTrigger.LogName.OVERVIEW);
             try {
