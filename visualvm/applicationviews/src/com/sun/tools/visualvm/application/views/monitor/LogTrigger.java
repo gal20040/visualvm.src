@@ -33,6 +33,16 @@ public class LogTrigger implements ILogTrigger{
         }
     }
 
+    public enum LogName {
+        ;
+        public static final String GENERAL = "general_log.txt";
+        public static final String CPU = "cpu_log.txt";
+        public static final String HEAP = "heap_log.txt";
+        public static final String CLASS = "class_log.txt";
+        public static final String THREAD = "thread_log.txt";
+        public static final String OVERVIEW = "overview_log.txt";
+    }
+
     @Override
     public boolean checkCPU(long cpuUsage) {
         if (commonLogging){
