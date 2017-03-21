@@ -161,6 +161,7 @@ class OverviewViewSupport {
             }
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
             fileReaderWriter.appendToOutputFile(output);
+            fileReaderWriter.close();
 
             return data.toString();
             
@@ -310,6 +311,7 @@ class OverviewViewSupport {
 
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
             fileReaderWriter.appendToOutputFile(jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
+            fileReaderWriter.close();
 
             JComponent contents;
             
@@ -346,6 +348,7 @@ class OverviewViewSupport {
 
             FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
             fileReaderWriter.appendToOutputFile(properties.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
+            fileReaderWriter.close();
 
             JComponent contents;
             
