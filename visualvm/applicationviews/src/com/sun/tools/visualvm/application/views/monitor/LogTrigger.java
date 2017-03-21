@@ -12,10 +12,7 @@ public class LogTrigger implements ILogTrigger{
     private long threads;
     private boolean[] state = new boolean[6];
 
-    /**
-     * @throws IOException
-     */
-    LogTrigger() throws IOException {
+    LogTrigger(){
         File config = new File("config_log.txt");
         try {
             BufferedReader reader = new BufferedReader(new FileReader(config.getAbsoluteFile()));
@@ -31,7 +28,7 @@ public class LogTrigger implements ILogTrigger{
                 reader.readLine(); //Classes
                 threads = Long.parseLong(reader.readLine());
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage() + " file 'config_log.txt' is missing");
         }
     }
@@ -41,7 +38,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (cpu != -1) {
                 state[0] = cpuUsage >= cpu;
-                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+                stateLogging = IsLoggingOn();
             }
                 return stateLogging;
         }
@@ -53,7 +50,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (this.maxHeap != -1) {
                 state[1] = maxHeap >= this.maxHeap;
-                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+                stateLogging = IsLoggingOn();
             }
             return stateLogging;
         }
@@ -65,7 +62,7 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (heapUsed != -1) {
                 state[2] = usedHeap >= heapUsed;
-                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+                stateLogging = IsLoggingOn();
             }
             return stateLogging;
         }
@@ -77,10 +74,14 @@ public class LogTrigger implements ILogTrigger{
         if (commonLogging){
             if (this.threads != -1) {
                 state[3] = threads >= this.threads;
-                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+                stateLogging = IsLoggingOn();
             }
             return stateLogging;
         }
         else return false;
+    }
+
+    public boolean IsLoggingOn(){
+        return state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
     }
 }
