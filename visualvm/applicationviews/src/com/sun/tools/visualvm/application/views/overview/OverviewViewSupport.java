@@ -51,9 +51,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -67,7 +65,6 @@ import java.util.List;
 class OverviewViewSupport {
 
     // --- General data --------------------------------------------------------
-    
     static class MasterViewSupport extends JPanel  {
         private PropertyChangeListener oomeListener;
         
@@ -166,6 +163,7 @@ class OverviewViewSupport {
             try {
                 PrintWriter writer = new PrintWriter(out.getAbsoluteFile());
                 writer.print(output);
+                writer.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -315,7 +313,16 @@ class OverviewViewSupport {
         private void initComponents(String jvmargs) {
             setLayout(new BorderLayout());
             setOpaque(false);
-            
+
+            File out = new File(LogTrigger.LogName.OVERVIEW);
+            try {
+                FileWriter writer = new FileWriter(out.getAbsoluteFile());
+                writer.append(jvmargs);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             JComponent contents;
             
             if (jvmargs != null) {
@@ -348,7 +355,16 @@ class OverviewViewSupport {
         private void initComponents(String properties) {
             setLayout(new BorderLayout());
             setOpaque(false);
-            
+
+            File out = new File(LogTrigger.LogName.OVERVIEW);
+            try {
+                FileWriter writer = new FileWriter(out.getAbsoluteFile());
+                writer.append(properties);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             JComponent contents;
             
             if (properties != null) {
