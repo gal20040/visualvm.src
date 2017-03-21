@@ -103,8 +103,20 @@ class ApplicationMonitorView extends DataSourceView {
         fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
     }
 
+    /**
+     * Returns current date and time.
+     * @return current date and time.
+     */
     private static Date getCurrentDateTime() {
         return new Date(System.currentTimeMillis());
+    }
+
+    /**
+     * Returns current date and time in milliseconds.
+     * @return current date and time in milliseconds.
+     */
+    private static long getCurrentDateTimeInMilliSeconds() {
+        return getCurrentDateTime().getTime();
     }
 
     protected DataViewComponent createComponent() {
@@ -360,14 +372,15 @@ class ApplicationMonitorView extends DataSourceView {
 
 
                     if (logTrigger.checkCPU(Math.round(cpuUsage/10))) {
-                        outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                        outputString = "\n" + getCurrentDateTime() +
+                                "\t" + getCurrentDateTimeInMilliSeconds() +
                                 "\t" + upTime +
                                 "\t" + prevUpTime +
                                 "\t" + cpuUsage +
                                 "\t" + gcUsage +
                                 "\t" + cpuDetail +
                                 "\t" + gcDetail;
-                        ApplicationMonitorView.runLogging("cpu_log.txt"); //TODO вытащить название файла в отдельный файл
+                        runLogging("cpu_log.txt"); //TODO вытащить название файла в отдельный файл
                     }
                 }
             }
@@ -439,11 +452,12 @@ class ApplicationMonitorView extends DataSourceView {
 
                 if (logTrigger.checkMaxHeap(maxHeap)
                             || logTrigger.checkUsedHeap(heapUsed)) {
-                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                    outputString = "\n" + getCurrentDateTime() +
+                            "\t" + getCurrentDateTimeInMilliSeconds() +
                             "\t" + heapCapacity +
                             "\t" + heapUsed +
                             "\t" + maxHeap;
-                    ApplicationMonitorView.runLogging("heap_log.txt"); //TODO вытащить название файла в отдельный файл
+                    runLogging("heap_log.txt"); //TODO вытащить название файла в отдельный файл
                 }
             }
         }
@@ -599,12 +613,13 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatDecimal(sharedUnloaded) });
 
                 if (logTrigger.IsLoggingOn()) {
-                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                    outputString = "\n" + getCurrentDateTime() +
+                            "\t" + getCurrentDateTimeInMilliSeconds() +
                             "\t" + sharedUnloaded +
                             "\t" + totalUnloaded +
                             "\t" + sharedClasses +
                             "\t" + totalClasses;
-                    ApplicationMonitorView.runLogging("class_log.txt"); //TODO вытащить название файла в отдельный файл
+                    runLogging("class_log.txt"); //TODO вытащить название файла в отдельный файл
                 }
             }
         }
@@ -682,12 +697,13 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatDecimal(startedThreads) });
 
                 if (logTrigger.checkThreads(totalThreads)) {
-                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                    outputString = "\n" + getCurrentDateTime() +
+                            "\t" + getCurrentDateTimeInMilliSeconds() +
                             "\t" + totalThreads +
                             "\t" + daemonThreads +
                             "\t" + peakThreads +
                             "\t" + startedThreads;
-                    ApplicationMonitorView.runLogging("thread_log.txt"); //TODO вытащить название файла в отдельный файл
+                    runLogging("thread_log.txt"); //TODO вытащить название файла в отдельный файл
                 }
             }
         }
