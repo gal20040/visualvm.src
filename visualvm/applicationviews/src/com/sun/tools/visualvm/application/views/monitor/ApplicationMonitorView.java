@@ -43,6 +43,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -65,26 +66,29 @@ import org.openide.util.WeakListeners;
  * @author Jiri Sedlacek
  */
 class ApplicationMonitorView extends DataSourceView {
-    
+
     private static final Logger LOGGER = Logger.getLogger(ApplicationMonitorView.class.getName());
 
     private static final String UNKNOWN = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Unknown"); // NOI18N
     private static final String IMAGE_PATH = "com/sun/tools/visualvm/application/views/resources/monitor.png";  // NOI18N
 
     private final ApplicationMonitorModel model;
-    
+
+    private static LogTrigger logTrigger = new LogTrigger();
+    private static FileReaderWriter fileReaderWriter;
+    private static String outputString;
 
     public ApplicationMonitorView(ApplicationMonitorModel model) {
         super(model.getSource(), NbBundle.getMessage(ApplicationMonitorView.class,
-                                 "LBL_Monitor"), new ImageIcon(ImageUtilities.   // NOI18N
-                                 loadImage(IMAGE_PATH, true)).getImage(), 20, false);
+                "LBL_Monitor"), new ImageIcon(ImageUtilities.   // NOI18N
+                loadImage(IMAGE_PATH, true)).getImage(), 20, false);
         this.model = model;
     }
-    
+
     protected void willBeAdded() {
         model.initialize();
     }
-    
+
     protected void removed() {
         model.cleanup();
     }
@@ -92,13 +96,23 @@ class ApplicationMonitorView extends DataSourceView {
     ApplicationMonitorModel getModel() {
         return model;
     }
-    
+
+    static void runLogging(String outputFileName) {
+        fileReaderWriter = new FileReaderWriter(outputFileName);
+        fileReaderWriter.appendToOutputFile(outputString);
+        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
+    }
+
+    private static Date getCurrentDateTime() {
+        return new Date(System.currentTimeMillis());
+    }
+
     protected DataViewComponent createComponent() {
         final MasterViewSupport masterViewSupport = new MasterViewSupport(model);
         DataViewComponent dvc = new DataViewComponent(
                 masterViewSupport.getMasterView(),
                 new DataViewComponent.MasterViewConfiguration(false));
-        
+
         final CpuViewSupport cpuViewSupport = new CpuViewSupport(model);
         dvc.configureDetailsArea(new DataViewComponent.DetailsAreaConfiguration(NbBundle.
                 getMessage(ApplicationMonitorView.class, "LBL_Cpu"), true), DataViewComponent.TOP_LEFT);  // NOI18N
@@ -139,35 +153,35 @@ class ApplicationMonitorView extends DataSourceView {
                 refresher.run();
             }
         });
-        
+
         return dvc;
     }
-    
-    
+
+
     // --- General data --------------------------------------------------------
-    
+
     private static class MasterViewSupport extends JPanel implements DataRemovedListener<DataSource>, PropertyChangeListener {
 
         private HTMLTextArea area;
         private JButton gcButton;
         private JButton heapDumpButton;
-        
+
         public MasterViewSupport(ApplicationMonitorModel model) {
             initComponents(model);
         }
-        
-        
+
+
         public DataViewComponent.MasterView getMasterView() {
             return new DataViewComponent.MasterView(NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Monitor"), null, this);  // NOI18N
         }
-        
+
         public void refresh(ApplicationMonitorModel model) {
             int selStart = area.getSelectionStart();
             int selEnd   = area.getSelectionEnd();
             area.setText(getBasicTelemetry(model));
             area.select(selStart, selEnd);
         }
-        
+
         public void dataRemoved(DataSource dataSource) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
@@ -180,14 +194,14 @@ class ApplicationMonitorView extends DataSourceView {
         public void propertyChange(PropertyChangeEvent evt) {
             dataRemoved(null);
         }
-        
+
         private void initComponents(final ApplicationMonitorModel model) {
             setLayout(new BorderLayout());
             setOpaque(false);
-            
+
             area = new HTMLTextArea(getBasicTelemetry(model));
             area.setBorder(BorderFactory.createEmptyBorder(14, 8, 14, 8));
-                        
+
             add(area, BorderLayout.CENTER);
 
             gcButton = new JButton(new AbstractAction(NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Perform_GC")) {    // NOI18N
@@ -195,7 +209,7 @@ class ApplicationMonitorView extends DataSourceView {
                     RequestProcessor.getDefault().post(new Runnable() {
                         public void run() {
                             try {
-                                model.getMemoryMXBean().gc(); 
+                                model.getMemoryMXBean().gc();
                             } catch (SecurityException ex) {
                                 String err = NbBundle.getMessage(ApplicationMonitorView.class, "TXT_Perform_GC_failed", ex.getLocalizedMessage());  // NOI18N
                                 NotifyDescriptor nd = new NotifyDescriptor.Message(err, NotifyDescriptor.INFORMATION_MESSAGE);
@@ -205,25 +219,25 @@ class ApplicationMonitorView extends DataSourceView {
                                 LOGGER.log(Level.WARNING, "initComponents", e);   // NOI18N
                                 gcButton.setEnabled(false);
                             }
-                        };
+                        }
                     });
                 }
             });
             gcButton.setEnabled(model.getMemoryMXBean() != null);
-            
+
             heapDumpButton = new JButton(new AbstractAction(NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Heap_Dump")) {   // NOI18N
                 public void actionPerformed(ActionEvent e) {
                     Application application = (Application)model.getSource();
                     boolean local = application.isLocalApplication();
                     boolean tagged = (e.getModifiers() & Toolkit.getDefaultToolkit().
-                                      getMenuShortcutKeyMask()) != 0;
+                            getMenuShortcutKeyMask()) != 0;
                     HeapDumpSupport hds = HeapDumpSupport.getInstance();
                     if (local) hds.takeHeapDump(application, !tagged);
                     else hds.takeRemoteHeapDump(application, null, !tagged);
                 }
             });
             heapDumpButton.setEnabled(model.isTakeHeapDumpSupported());
-            
+
             JPanel buttonsArea = new JPanel(new BorderLayout());
             buttonsArea.setOpaque(false);
             JPanel buttonsContainer = new JPanel(new BorderLayout(3, 0));
@@ -232,7 +246,7 @@ class ApplicationMonitorView extends DataSourceView {
             buttonsContainer.add(gcButton, BorderLayout.WEST);
             buttonsContainer.add(heapDumpButton, BorderLayout.EAST);
             buttonsArea.add(buttonsContainer, BorderLayout.NORTH);
-            
+
             add(buttonsArea, BorderLayout.AFTER_LINE_ENDS);
 
             if (model.getSource() instanceof Application) {
@@ -246,36 +260,36 @@ class ApplicationMonitorView extends DataSourceView {
             String uptime = model.getUpTime() == -1 ? UNKNOWN : getTime(model.getUpTime());
             return NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Uptime", uptime); // NOI18N
         }
-        
+
         public static String getTime(long millis) {
             // Hours
             long hours = millis / 3600000;
             String sHours = (hours == 0 ? "" : "" + hours); // NOI18N
             millis = millis % 3600000;
-            
+
             // Minutes
             long minutes = millis / 60000;
             String sMinutes = (((hours > 0) && (minutes < 10)) ? "0" + minutes : "" + minutes); // NOI18N
             millis = millis % 60000;
-            
+
             // Seconds
             long seconds = millis / 1000;
             String sSeconds = ((seconds < 10) ? "0" + seconds : "" + seconds); // NOI18N
-            
+
             if (sHours.length() == 0) {
-                 return NbBundle.getMessage(ApplicationMonitorView.class, "FORMAT_ms", // NOI18N
-                                            new Object[] { sMinutes, sSeconds });
+                return NbBundle.getMessage(ApplicationMonitorView.class, "FORMAT_ms", // NOI18N
+                        new Object[] { sMinutes, sSeconds });
             } else {
                 return NbBundle.getMessage(ApplicationMonitorView.class, "FORMAT_hms", // NOI18N
-                                            new Object[] { sHours, sMinutes, sSeconds });
+                        new Object[] { sHours, sMinutes, sSeconds });
             }
         }
-        
+
     }
 
-    
+
     // --- CPU -----------------------------------------------------------------
-    
+
     private static class CpuViewSupport extends JPanel  {
 
         private static final String CPU = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Cpu"); // NOI18N
@@ -289,9 +303,6 @@ class ApplicationMonitorView extends DataSourceView {
 
         private SimpleXYChartSupport chartSupport;
 
-        private static final FileReaderWriter fileReaderWriter1 = new FileReaderWriter("cpu_log.txt");
-        private static String outputString1;
-
         public CpuViewSupport(ApplicationMonitorModel model) {
             initModels(model);
             initComponents(model);
@@ -303,24 +314,23 @@ class ApplicationMonitorView extends DataSourceView {
 
         public void refresh(ApplicationMonitorModel model) {
             if (cpuMonitoringSupported || gcMonitoringSupported) {
-                //model.logTrigger.IsLoggingOn();
                 long upTime = model.getUpTime() * 1000000;
                 long prevUpTime = model.getPrevUpTime() * 1000000;
 
                 boolean tracksProcessCpuTime = cpuMonitoringSupported &&
-                                               model.getPrevProcessCpuTime() != -1;
+                        model.getPrevProcessCpuTime() != -1;
                 long processCpuTime = tracksProcessCpuTime ?
-                    model.getProcessCpuTime() / processorsCount : -1;
+                        model.getProcessCpuTime() / processorsCount : -1;
                 long prevProcessCpuTime = tracksProcessCpuTime ?
-                    model.getPrevProcessCpuTime() / processorsCount : -1;
+                        model.getPrevProcessCpuTime() / processorsCount : -1;
 
                 boolean tracksProcessGcTime  = gcMonitoringSupported &&
-                                               model.getPrevProcessGcTime() != -1;
+                        model.getPrevProcessGcTime() != -1;
                 long processGcTime  = tracksProcessGcTime  ?
-                    model.getProcessGcTime() * 1000000 / processorsCount : -1;
+                        model.getProcessGcTime() * 1000000 / processorsCount : -1;
                 long prevProcessGcTime  = tracksProcessGcTime  ?
-                    model.getPrevProcessGcTime() * 1000000 / processorsCount : -1;
-                
+                        model.getPrevProcessGcTime() * 1000000 / processorsCount : -1;
+
                 if (prevUpTime != -1 && (tracksProcessCpuTime || tracksProcessGcTime)) {
 
                     long upTimeDiff = upTime - prevUpTime;
@@ -332,46 +342,34 @@ class ApplicationMonitorView extends DataSourceView {
                     if (tracksProcessCpuTime) {
                         long processTimeDiff = processCpuTime - prevProcessCpuTime;
                         cpuUsage = upTimeDiff > 0 ? Math.min((long)(1000 * (float)processTimeDiff /
-                                                             (float)upTimeDiff), 1000) : 0;
+                                (float)upTimeDiff), 1000) : 0;
                         cpuDetail = cpuUsage == -1 ? UNKNOWN : chartSupport.formatPercent(cpuUsage);
                     }
 
                     if (tracksProcessGcTime) {
                         long processGcTimeDiff = processGcTime - prevProcessGcTime;
                         gcUsage = upTimeDiff > 0 ? Math.min((long)(1000 * (float)processGcTimeDiff /
-                                                            (float)upTimeDiff), 1000) : 0;
+                                (float)upTimeDiff), 1000) : 0;
                         if (cpuUsage != -1 && cpuUsage < gcUsage) gcUsage = cpuUsage;
                         gcDetail = gcUsage == -1 ? UNKNOWN : chartSupport.formatPercent(gcUsage);
                     }
-                    
+
                     if (liveModel)
                         chartSupport.addValues(model.getTimestamp(), new long[] { Math.max(cpuUsage, 0), Math.max(gcUsage, 0) });
                     chartSupport.updateDetails(new String[] { cpuDetail, gcDetail });
 
-                    outputString1 = "\n" + upTime +
-                            "\t" + prevUpTime +
-                            "\t" + cpuUsage +
-                            "\t" + gcUsage +
-                            "\t" + cpuDetail +
-                            "\t" + gcDetail;
-                    fileReaderWriter1.appendToOutputFile(outputString1);
-                    fileReaderWriter1.close(); //TODO надо ли каждый раз закрывать?
+
+                    if (logTrigger.checkCPU(Math.round(cpuUsage/10))) {
+                        outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                                "\t" + upTime +
+                                "\t" + prevUpTime +
+                                "\t" + cpuUsage +
+                                "\t" + gcUsage +
+                                "\t" + cpuDetail +
+                                "\t" + gcDetail;
+                        ApplicationMonitorView.runLogging("cpu_log.txt"); //TODO вытащить название файла в отдельный файл
+                    }
                 }
-                
-                //                    outputString = "upTime = " + upTime +
-//                            "\nprevUpTime = " + prevUpTime +
-//                            "\ncpuUsage = " + cpuUsage +
-//                            "\ngcUsage = " + gcUsage +
-//                            "\ncpuDetail = " + cpuDetail +
-//                            "\ngcDetail = " + gcDetail;
-//                outputString = "\n" + upTime +
-//                        "\t" + prevUpTime +
-//                        "\t" + cpuUsage +
-//                        "\t" + gcUsage +
-//                        "\t" + cpuDetail +
-//                        "\t" + gcDetail;
-//                fileReaderWriter.appendToOutputFile(outputString);
-//                fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
             }
         }
 
@@ -389,7 +387,7 @@ class ApplicationMonitorView extends DataSourceView {
 
             chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
             model.registerCpuChartSupport(chartSupport);
-            
+
             chartSupport.setZoomingEnabled(!liveModel);
         }
 
@@ -402,7 +400,7 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN });
             } else {
                 add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                    BorderLayout.CENTER);
+                        BorderLayout.CENTER);
             }
         }
 
@@ -417,9 +415,6 @@ class ApplicationMonitorView extends DataSourceView {
         private String heapName;
 
         private SimpleXYChartSupport chartSupport;
-        
-//        private static final FileReaderWriter fileReaderWriter2 = new FileReaderWriter("heap_log.txt");
-//        private static String outputString2;
 
         public HeapViewSupport(ApplicationMonitorModel model) {
             initModels(model);
@@ -437,18 +432,19 @@ class ApplicationMonitorView extends DataSourceView {
                 long maxHeap = model.getMaxHeap();
 
                 if (liveModel)
-                        chartSupport.addValues(model.getTimestamp(), new long[] { heapCapacity, heapUsed });
+                    chartSupport.addValues(model.getTimestamp(), new long[] { heapCapacity, heapUsed });
                 chartSupport.updateDetails(new String[] { chartSupport.formatBytes(heapCapacity),
-                                                          chartSupport.formatBytes(heapUsed),
-                                                          chartSupport.formatBytes(maxHeap) });
+                        chartSupport.formatBytes(heapUsed),
+                        chartSupport.formatBytes(maxHeap) });
 
-                String outputString2 = "\n" + heapCapacity +
-                    "\t" + heapUsed +
-                    "\t" + maxHeap;
-                FileReaderWriter fileReaderWriter2 = new FileReaderWriter("heap_log.txt");
-
-                fileReaderWriter2.appendToOutputFile(outputString2);
-                fileReaderWriter2.close(); //TODO надо ли каждый раз закрывать?
+                if (logTrigger.checkMaxHeap(maxHeap)
+                            || logTrigger.checkUsedHeap(heapUsed)) {
+                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                            "\t" + heapCapacity +
+                            "\t" + heapUsed +
+                            "\t" + maxHeap;
+                    ApplicationMonitorView.runLogging("heap_log.txt"); //TODO вытащить название файла в отдельный файл
+                }
             }
         }
 
@@ -471,7 +467,7 @@ class ApplicationMonitorView extends DataSourceView {
 
             chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
             model.registerHeapChartSupport(chartSupport);
-            
+
             chartSupport.setZoomingEnabled(!liveModel);
         }
 
@@ -484,7 +480,7 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN });
             } else {
                 add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                    BorderLayout.CENTER);
+                        BorderLayout.CENTER);
             }
         }
 
@@ -517,10 +513,10 @@ class ApplicationMonitorView extends DataSourceView {
                 long permgenMax = model.getPermgenMax();
 
                 if (liveModel)
-                        chartSupport.addValues(model.getTimestamp(), new long[] { permgenCapacity, permgenUsed });
+                    chartSupport.addValues(model.getTimestamp(), new long[] { permgenCapacity, permgenUsed });
                 chartSupport.updateDetails(new String[] { chartSupport.formatBytes(permgenCapacity),
-                                                          chartSupport.formatBytes(permgenUsed),
-                                                          chartSupport.formatBytes(permgenMax) });
+                        chartSupport.formatBytes(permgenUsed),
+                        chartSupport.formatBytes(permgenMax) });
             }
         }
 
@@ -543,7 +539,7 @@ class ApplicationMonitorView extends DataSourceView {
 
             chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
             model.registerPermGenChartSupport(chartSupport);
-            
+
             chartSupport.setZoomingEnabled(!liveModel);
         }
 
@@ -556,7 +552,7 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN });
             } else {
                 add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                    BorderLayout.CENTER);
+                        BorderLayout.CENTER);
             }
         }
 
@@ -596,11 +592,20 @@ class ApplicationMonitorView extends DataSourceView {
                 long totalClasses   = model.getTotalLoaded() - totalUnloaded + sharedClasses;
 
                 if (liveModel)
-                        chartSupport.addValues(model.getTimestamp(), new long[] { totalClasses, sharedClasses });
+                    chartSupport.addValues(model.getTimestamp(), new long[] { totalClasses, sharedClasses });
                 chartSupport.updateDetails(new String[] { chartSupport.formatDecimal(totalClasses),
-                                                          chartSupport.formatDecimal(sharedClasses),
-                                                          chartSupport.formatDecimal(totalUnloaded),
-                                                          chartSupport.formatDecimal(sharedUnloaded) });
+                        chartSupport.formatDecimal(sharedClasses),
+                        chartSupport.formatDecimal(totalUnloaded),
+                        chartSupport.formatDecimal(sharedUnloaded) });
+
+                if (logTrigger.IsLoggingOn()) {
+                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                            "\t" + sharedUnloaded +
+                            "\t" + totalUnloaded +
+                            "\t" + sharedClasses +
+                            "\t" + totalClasses;
+                    ApplicationMonitorView.runLogging("class_log.txt"); //TODO вытащить название файла в отдельный файл
+                }
             }
         }
 
@@ -613,11 +618,11 @@ class ApplicationMonitorView extends DataSourceView {
 
             chartDescriptor.addLineItems(TOTAL_LOADED_LEG, SHARED_LOADED_LEG);
             chartDescriptor.setDetailsItems(new String[] { TOTAL_LOADED, SHARED_LOADED,
-                                                           TOTAL_UNLOADED, SHARED_UNLOADED });
+                    TOTAL_UNLOADED, SHARED_UNLOADED });
 
             chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
             model.registerClassesChartSupport(chartSupport);
-            
+
             chartSupport.setZoomingEnabled(!liveModel);
         }
 
@@ -630,12 +635,11 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN });
             } else {
                 add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                    BorderLayout.CENTER);
+                        BorderLayout.CENTER);
             }
         }
 
     }
-
 
     // --- Threads -------------------------------------------------------------
 
@@ -671,20 +675,20 @@ class ApplicationMonitorView extends DataSourceView {
 
 
                 if (liveModel)
-                        chartSupport.addValues(model.getTimestamp(), new long[] { totalThreads, daemonThreads });
+                    chartSupport.addValues(model.getTimestamp(), new long[] { totalThreads, daemonThreads });
                 chartSupport.updateDetails(new String[] { chartSupport.formatDecimal(totalThreads),
-                                                          chartSupport.formatDecimal(daemonThreads),
-                                                          chartSupport.formatDecimal(peakThreads),
-                                                          chartSupport.formatDecimal(startedThreads) });
+                        chartSupport.formatDecimal(daemonThreads),
+                        chartSupport.formatDecimal(peakThreads),
+                        chartSupport.formatDecimal(startedThreads) });
 
-                String outputString2 = "\n" + totalThreads +
-                        "\t" + daemonThreads +
-                        "\t" +peakThreads +
-                        "\t" +startedThreads;
-                FileReaderWriter fileReaderWriter2 = new FileReaderWriter("threads_log.txt");
-
-                fileReaderWriter2.appendToOutputFile(outputString2);
-                fileReaderWriter2.close();
+                if (logTrigger.checkThreads(totalThreads)) {
+                    outputString = "\n" + ApplicationMonitorView.getCurrentDateTime() +
+                            "\t" + totalThreads +
+                            "\t" + daemonThreads +
+                            "\t" + peakThreads +
+                            "\t" + startedThreads;
+                    ApplicationMonitorView.runLogging("thread_log.txt"); //TODO вытащить название файла в отдельный файл
+                }
             }
         }
 
@@ -697,11 +701,11 @@ class ApplicationMonitorView extends DataSourceView {
 
             chartDescriptor.addLineItems(LIVE_LEG, DAEMON_LEG);
             chartDescriptor.setDetailsItems(new String[] { LIVE, DAEMON,
-                                                           PEAK, STARTED });
+                    PEAK, STARTED });
 
             chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
             model.registerThreadsChartSupport(chartSupport);
-            
+
             chartSupport.setZoomingEnabled(!liveModel);
         }
 
@@ -714,7 +718,7 @@ class ApplicationMonitorView extends DataSourceView {
                 chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN });
             } else {
                 add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                    BorderLayout.CENTER);
+                        BorderLayout.CENTER);
             }
         }
 
