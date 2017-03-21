@@ -32,33 +32,30 @@ import com.sun.tools.visualvm.application.snapshot.ApplicationSnapshot;
 import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptor;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptorFactory;
-import com.sun.tools.visualvm.core.snapshot.Snapshot;
 import com.sun.tools.visualvm.core.datasupport.DataChangeEvent;
 import com.sun.tools.visualvm.core.datasupport.DataChangeListener;
 import com.sun.tools.visualvm.core.datasupport.Positionable;
 import com.sun.tools.visualvm.core.snapshot.RegisteredSnapshotCategories;
+import com.sun.tools.visualvm.core.snapshot.Snapshot;
 import com.sun.tools.visualvm.core.snapshot.SnapshotCategory;
 import com.sun.tools.visualvm.core.ui.DataSourceWindowManager;
 import com.sun.tools.visualvm.core.ui.components.DataViewComponent;
 import com.sun.tools.visualvm.core.ui.components.NotSupportedDisplayer;
 import com.sun.tools.visualvm.core.ui.components.ScrollableContainer;
 import com.sun.tools.visualvm.uisupport.HTMLTextArea;
-import java.awt.BorderLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.*;
+import java.util.List;
 
 /**
  * A public entrypoint to the Overview subtab.
@@ -149,7 +146,14 @@ class OverviewViewSupport {
                 data.append("<b>"+JVM_FLAGS+":</b> " + model.getJvmFlags() + "<br><br>");   // NOI18N
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
             }
-            
+            File out = new File("general_log.txt");
+            try {
+                PrintWriter writer = new PrintWriter(out.getAbsoluteFile());
+                writer.print(data.toString());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
             return data.toString();
             
         }
