@@ -10,6 +10,7 @@ public class LogTrigger implements ILogTrigger{
     private long maxHeap;
     private long heapUsed;
     private long threads;
+    private boolean[] state = new boolean[6];
 
     /**
      * @throws IOException
@@ -20,6 +21,9 @@ public class LogTrigger implements ILogTrigger{
             BufferedReader reader = new BufferedReader(new FileReader(config.getAbsoluteFile()));
             commonLogging = reader.readLine().equalsIgnoreCase("true");
             if (commonLogging){
+                for (int i = 0; i < 6; i++) {
+                    state[i] = false;
+                }
                 cpu = Long.parseLong(reader.readLine());
                 reader.readLine(); //GC
                 maxHeap = Long.parseLong(reader.readLine());
@@ -35,8 +39,11 @@ public class LogTrigger implements ILogTrigger{
     @Override
     public boolean checkCPU(long cpuUsage) {
         if (commonLogging){
-            stateLogging = cpuUsage >= cpu;
-            return stateLogging;
+            if (cpu != -1) {
+                state[0] = cpuUsage >= cpu;
+                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+            }
+                return stateLogging;
         }
         else return false;
     }
@@ -44,7 +51,10 @@ public class LogTrigger implements ILogTrigger{
     @Override
     public boolean checkMaxHeap(long maxHeap) {
         if (commonLogging){
-            stateLogging = maxHeap >= this.maxHeap;
+            if (this.maxHeap != -1) {
+                state[1] = maxHeap >= this.maxHeap;
+                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+            }
             return stateLogging;
         }
         else return false;
@@ -53,7 +63,10 @@ public class LogTrigger implements ILogTrigger{
     @Override
     public boolean checkUsedHeap(long usedHeap) {
         if (commonLogging){
-            stateLogging = usedHeap >= heapUsed;
+            if (heapUsed != -1) {
+                state[2] = usedHeap >= heapUsed;
+                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+            }
             return stateLogging;
         }
         else return false;
@@ -62,7 +75,10 @@ public class LogTrigger implements ILogTrigger{
     @Override
     public boolean checkThreads(long threads) {
         if (commonLogging){
-            stateLogging = threads >= this.threads;
+            if (this.threads != -1) {
+                state[3] = threads >= this.threads;
+                stateLogging = state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
+            }
             return stateLogging;
         }
         else return false;
