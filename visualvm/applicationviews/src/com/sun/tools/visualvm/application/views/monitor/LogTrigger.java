@@ -13,7 +13,7 @@ public class LogTrigger implements ILogTrigger{
     private boolean[] state = new boolean[6];
 
     LogTrigger(){
-        File config = new File("config_log.txt");
+        File config = new File(LogName.CONFIG);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(config.getAbsoluteFile()));
             commonLogging = reader.readLine().equalsIgnoreCase("true");
@@ -41,6 +41,7 @@ public class LogTrigger implements ILogTrigger{
         public static final String CLASS = "class_log.txt";
         public static final String THREAD = "thread_log.txt";
         public static final String OVERVIEW = "overview_log.txt";
+        public static final String CONFIG = "log.config";
     }
 
     @Override
