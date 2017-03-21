@@ -14,6 +14,7 @@ public class LogTrigger implements ILogTrigger{
     private long heapUsed;
     private long threads;
     private boolean[] state = new boolean[6];
+    public static String directory;
 
     LogTrigger(){
         File config = new File(LogName.CONFIG);
@@ -38,7 +39,6 @@ public class LogTrigger implements ILogTrigger{
 
     public enum LogName {
         ;
-        public static final String GENERAL = "general_log.txt";
         public static final String CPU = "cpu_log.txt";
         public static final String HEAP = "heap_log.txt";
         public static final String CLASS = "class_log.txt";
@@ -99,7 +99,7 @@ public class LogTrigger implements ILogTrigger{
         return state[0] || state[1] || state[2] || state[3] || state[4] || state[5];
     }
 
-    public String getLogHeader(String outputFileName) {
+    private String getLogHeader(String outputFileName) {
         String logHeader = "Date/time" +
                 "\t" + "Date/time in milliseconds";
 
@@ -111,16 +111,10 @@ public class LogTrigger implements ILogTrigger{
                     "\t" + "Shared unloaded classes";
         else if (outputFileName.equals(LogName.CPU))
             logHeader = logHeader +
-                    "\t" + "upTime" +
-                    "\t" + "prevUpTime" +
                     "\t" + "CPU usage" +
                     "\t" + "GC usage" +
                     "\t" + "CPU detail" +
                     "\t" + "GC detail";
-        else if (outputFileName.equals(LogName.GENERAL))
-            logHeader = logHeader +
-                    "\t" + "selStart" +
-                    "\t" + "selEnd";
         else if (outputFileName.equals(LogName.HEAP))
             logHeader = logHeader +
                     "\t" + "Heap capacity" +
@@ -145,11 +139,29 @@ public class LogTrigger implements ILogTrigger{
             fileReaderWriter.appendToOutputFile(logHeader);
         }
 
+        outputString = "\n" + getCurrentDateTime() +
+                "\t" + getCurrentDateTimeInMilliSeconds() + outputString;
         fileReaderWriter.appendToOutputFile(outputString);
-        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
+        fileReaderWriter.close();
     }
 
     private static long getFileSize(File file) {
         return file.length();
+    }
+
+    /**
+     * Returns current date and time.
+     * @return current date and time.
+     */
+    private static Date getCurrentDateTime() {
+        return new Date(System.currentTimeMillis());
+    }
+
+    /**
+     * Returns current date and time in milliseconds.
+     * @return current date and time in milliseconds.
+     */
+    private static long getCurrentDateTimeInMilliSeconds() {
+        return getCurrentDateTime().getTime();
     }
 }

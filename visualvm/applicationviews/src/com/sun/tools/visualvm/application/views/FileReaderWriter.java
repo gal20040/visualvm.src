@@ -1,5 +1,7 @@
 package com.sun.tools.visualvm.application.views;
 
+import com.sun.tools.visualvm.application.views.monitor.LogTrigger;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -19,9 +21,9 @@ public class FileReaderWriter {
     private void initiateFileWriter() {
         try {
             if (outputFileName == null)
-                outputFileName = "outputArtem.txt";
+                outputFileName = "output.txt";
             boolean append = true;
-            fileWriter = new FileWriter(outputFileName, append);
+            fileWriter = new FileWriter(LogTrigger.directory + outputFileName, append);
         } catch (IOException e) {
             close();
             assert false : "Some problem with output file: IOException.";

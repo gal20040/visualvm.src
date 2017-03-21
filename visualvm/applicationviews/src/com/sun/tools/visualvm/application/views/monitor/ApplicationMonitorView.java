@@ -110,21 +110,21 @@ class ApplicationMonitorView extends DataSourceView {
 //        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
 //    }
 
-    /**
-     * Returns current date and time.
-     * @return current date and time.
-     */
-    private static Date getCurrentDateTime() {
-        return new Date(System.currentTimeMillis());
-    }
-
-    /**
-     * Returns current date and time in milliseconds.
-     * @return current date and time in milliseconds.
-     */
-    private static long getCurrentDateTimeInMilliSeconds() {
-        return getCurrentDateTime().getTime();
-    }
+//    /**
+//     * Returns current date and time.
+//     * @return current date and time.
+//     */
+//    private static Date getCurrentDateTime() {
+//        return new Date(System.currentTimeMillis());
+//    }
+//
+//    /**
+//     * Returns current date and time in milliseconds.
+//     * @return current date and time in milliseconds.
+//     */
+//    private static long getCurrentDateTimeInMilliSeconds() {
+//        return getCurrentDateTime().getTime();
+//    }
 
 //    private static long getFileSize(File file) {
 //        return file.length();
@@ -203,14 +203,6 @@ class ApplicationMonitorView extends DataSourceView {
             int selEnd   = area.getSelectionEnd();
             area.setText(getBasicTelemetry(model));
             area.select(selStart, selEnd);
-
-            if (logTrigger.isLoggingOn()) {
-                outputString = "\n" + getCurrentDateTime() +
-                        "\t" + getCurrentDateTimeInMilliSeconds() +
-                        "\t" + selStart +
-                        "\t" + selEnd;
-                logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.GENERAL, outputString);
-            }
         }
 
         public void dataRemoved(DataSource dataSource) {
@@ -391,11 +383,7 @@ class ApplicationMonitorView extends DataSourceView {
 
 
                     if (logTrigger.checkCPU(Math.round(cpuUsage/10))) {
-                        outputString = "\n" + getCurrentDateTime() +
-                                "\t" + getCurrentDateTimeInMilliSeconds() +
-                                "\t" + upTime +
-                                "\t" + prevUpTime +
-                                "\t" + cpuUsage +
+                        outputString = "\t" + cpuUsage +
                                 "\t" + gcUsage +
                                 "\t" + cpuDetail +
                                 "\t" + gcDetail;
@@ -471,9 +459,7 @@ class ApplicationMonitorView extends DataSourceView {
 
                 if (logTrigger.checkMaxHeap(maxHeap)
                         || logTrigger.checkUsedHeap(heapUsed)) {
-                    outputString = "\n" + getCurrentDateTime() +
-                            "\t" + getCurrentDateTimeInMilliSeconds() +
-                            "\t" + heapCapacity +
+                    outputString = "\t" + heapCapacity +
                             "\t" + heapUsed +
                             "\t" + maxHeap;
                     logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.HEAP, outputString);
@@ -632,9 +618,7 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatDecimal(sharedUnloaded) });
 
                 if (logTrigger.isLoggingOn()) {
-                    outputString = "\n" + getCurrentDateTime() +
-                            "\t" + getCurrentDateTimeInMilliSeconds() +
-                            "\t" + totalClasses +
+                    outputString = "\t" + totalClasses +
                             "\t" + sharedClasses +
                             "\t" + totalUnloaded +
                             "\t" + sharedUnloaded;
@@ -716,9 +700,7 @@ class ApplicationMonitorView extends DataSourceView {
                         chartSupport.formatDecimal(startedThreads) });
 
                 if (logTrigger.checkThreads(totalThreads)) {
-                    outputString = "\n" + getCurrentDateTime() +
-                            "\t" + getCurrentDateTimeInMilliSeconds() +
-                            "\t" + totalThreads +
+                    outputString = "\t" + totalThreads +
                             "\t" + daemonThreads +
                             "\t" + peakThreads +
                             "\t" + startedThreads;

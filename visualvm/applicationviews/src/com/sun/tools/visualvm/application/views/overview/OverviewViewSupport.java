@@ -52,7 +52,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -65,26 +67,40 @@ import java.util.List;
 class OverviewViewSupport {
 
     // --- General data --------------------------------------------------------
+
     static class MasterViewSupport extends JPanel  {
         private PropertyChangeListener oomeListener;
-        
+
         public MasterViewSupport(ApplicationOverviewModel model) {
             initComponents(model);
         }
-        
-        
+
+
         public DataViewComponent.MasterView getMasterView() {
             return new DataViewComponent.MasterView(NbBundle.getMessage(OverviewViewSupport.class, "LBL_Overview"), null, this);    // NOI18N
         }
-        
-        
+
+        static String checkDirectory(final String pathName) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd HH_mm_ss");
+            final String logs = NbBundle.getMessage(OverviewViewSupport.class, "LBL_logs"); // NOI18N
+
+            File directory = new File(logs + "/"
+                    + pathName + "/"
+                    + format.format(new Date(System.currentTimeMillis())));
+            if (!directory.exists()) {
+                if (directory.mkdirs())
+                    return directory.toString() + "/";
+            }
+            return null;
+        }
+
         private void initComponents(final ApplicationOverviewModel model) {
             setLayout(new BorderLayout());
             setOpaque(false);
-            
+
             final HTMLTextArea area = new HTMLTextArea("<nobr>" + getGeneralProperties(model) + "</nobr>"); // NOI18N
             area.setBorder(BorderFactory.createEmptyBorder(14, 8, 14, 8));
-            
+
             DataSource source = model.getSource();
             if (source instanceof Application) {
                 oomeListener = new PropertyChangeListener() {
@@ -102,11 +118,14 @@ class OverviewViewSupport {
             }
             add(area, BorderLayout.CENTER);
         }
-        
+
         private String getGeneralProperties(ApplicationOverviewModel model) {
+            //this code line must be the first line - it assigns directory name.
+            LogTrigger.directory = checkDirectory(model.getMainClass());
+
             StringBuilder data = new StringBuilder();
-            String output = new String();
-            
+            String output = "";
+
             // Application information
             String PID = NbBundle.getMessage(OverviewViewSupport.class, "LBL_PID"); // NOI18N
             String HOST = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Host");   // NOI18N
@@ -114,7 +133,7 @@ class OverviewViewSupport {
             output+=PID+": "+model.getPid()+"\n";
             data.append("<b>"+HOST+":</b> " + model.getHostName() + "<br>");    // NOI18N
             output+=HOST+": " + model.getHostName() + "\n";
-            
+
             if (model.basicInfoSupported()) {
                 String MAIN_CLASS = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Main_class");   // NOI18N
                 String ARGS = NbBundle.getMessage(OverviewViewSupport.class, "LBL_Arguments");  // NOI18N
@@ -164,54 +183,53 @@ class OverviewViewSupport {
             fileReaderWriter.close();
 
             return data.toString();
-            
         }
-        
+
     }
-    
+
     // --- Snapshots -----------------------------------------------------------
-    
+
     static class SnapshotsViewSupport extends JPanel implements DataChangeListener<Snapshot> {
-        
+
         private static final String LINK_TOGGLE_CATEGORY = "file:/toggle_category"; // NOI18N
         private static final String LINK_OPEN_SNAPSHOT = "file:/open_snapshot"; // NOI18N
-        
+
         private DataSource dataSource;
         private HTMLTextArea area;
-        
+
         private final Map<Integer, Snapshot> snapshotsMap = new HashMap();
         private final Map<String, Boolean> expansionMap = new HashMap();
 
         private boolean standaloneAppSnapshot;
-        
-        
+
+
         public SnapshotsViewSupport(DataSource dataSource) {
             this.dataSource = dataSource;
             initComponents();
             dataSource.getRepository().addDataChangeListener(this, Snapshot.class);
 
             standaloneAppSnapshot = dataSource.getOwner() == null &&
-                                    dataSource instanceof ApplicationSnapshot;
+                    dataSource instanceof ApplicationSnapshot;
             if (standaloneAppSnapshot) {
                 dataSource.setVisible(false);
                 DataSource.ROOT.getRepository().addDataSource(dataSource);
             }
         }
-        
+
         public DataViewComponent.DetailsView getDetailsView() {
             return new DataViewComponent.DetailsView(NbBundle.getMessage(OverviewViewSupport.class, "LBL_Saved_data"), null, 10, this, null);   // NOI18N
         }
-        
+
         private void initComponents() {
             setLayout(new BorderLayout());
             setOpaque(false);
-            
+
             area = new HTMLTextArea() {
                 protected void showURL(URL url) {
                     String link = url.toString();
                     if (link.startsWith(LINK_TOGGLE_CATEGORY)) {
                         link = link.substring(LINK_TOGGLE_CATEGORY.length());
-                        toggleExpanded(link); 
+                        toggleExpanded(link);
                         updateSavedData();
                     } else if (link.startsWith(LINK_OPEN_SNAPSHOT)) {
                         link = link.substring(LINK_OPEN_SNAPSHOT.length());
@@ -222,26 +240,26 @@ class OverviewViewSupport {
             };
             updateSavedData();
             area.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            
+
             add(new ScrollableContainer(area), BorderLayout.CENTER);
         }
-        
+
         public void dataChanged(DataChangeEvent<Snapshot> event) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() { updateSavedData(); }
             });
         }
-            
+
         void removed() {
             dataSource.getRepository().removeDataChangeListener(this);
             if (standaloneAppSnapshot)
                 DataSource.ROOT.getRepository().removeDataSource(dataSource);
         }
-        
+
         private void updateSavedData() {
             snapshotsMap.clear();
             StringBuilder data = new StringBuilder();
-            
+
             List<SnapshotCategory> snapshotCategories = RegisteredSnapshotCategories.sharedInstance().getVisibleCategories();
             for (SnapshotCategory category : snapshotCategories) {
                 Set<Snapshot> snapshots = dataSource.getRepository().getDataSources(category.getType());
@@ -250,7 +268,7 @@ class OverviewViewSupport {
                 } else {
                     String categoryName = category.getName();
                     data.append("<b>" + categoryName + ":</b> <a href='" + (LINK_TOGGLE_CATEGORY + categoryName) + "'>" + snapshots.size() + "</a><br>"); // NOI18N
-                    
+
                     if (isExpanded(categoryName)) {
                         List<DataSourceDescriptor> descriptors = new ArrayList();
                         Map<DataSourceDescriptor, Snapshot> dataSources = new HashMap();
@@ -272,11 +290,11 @@ class OverviewViewSupport {
                         data.append("<br>"); // NOI18N
                     }
                 }
-            }            
-            
+            }
+
             area.setText("<nobr>" + data.toString() + "</nobr>");   // NOI18N
         }
-        
+
         private boolean isExpanded(String categoryName) {
             Boolean expanded = expansionMap.get(categoryName);
             if (expanded == null) {
@@ -285,26 +303,26 @@ class OverviewViewSupport {
             }
             return expanded.booleanValue();
         }
-        
+
         private void toggleExpanded(String categoryName) {
             expansionMap.put(categoryName, !isExpanded(categoryName));
         }
-        
+
     }
-    
-    
+
+
     // --- JVM arguments -------------------------------------------------------
-    
+
     static class JVMArgumentsViewSupport extends JPanel  {
-        
+
         public JVMArgumentsViewSupport(String jvmargs) {
             initComponents(jvmargs);
         }
-        
+
         public DataViewComponent.DetailsView getDetailsView() {
             return new DataViewComponent.DetailsView(NbBundle.getMessage(OverviewViewSupport.class, "LBL_JVM_arguments"), null, 10, this, null);    // NOI18N
         }
-        
+
         private void initComponents(String jvmargs) {
             setLayout(new BorderLayout());
             setOpaque(false);
@@ -314,7 +332,7 @@ class OverviewViewSupport {
             fileReaderWriter.close();
 
             JComponent contents;
-            
+
             if (jvmargs != null) {
                 HTMLTextArea area = new HTMLTextArea("<nobr>" + jvmargs + "</nobr>");   // NOI18N
                 area.setCaretPosition(0);
@@ -323,25 +341,25 @@ class OverviewViewSupport {
             } else {
                 contents = new NotSupportedDisplayer(NotSupportedDisplayer.JVM);
             }
-            
+
             add(new ScrollableContainer(contents), BorderLayout.CENTER);
         }
-        
-                }
-        
-    
+
+    }
+
+
     // --- System properties ---------------------------------------------------
-    
+
     static class SystemPropertiesViewSupport extends JPanel  {
-        
+
         public SystemPropertiesViewSupport(String properties) {
             initComponents(properties);
         }
-        
+
         public DataViewComponent.DetailsView getDetailsView() {
             return new DataViewComponent.DetailsView(NbBundle.getMessage(OverviewViewSupport.class, "LBL_System_properties"), null, 20, this, null);    // NOI18N
         }
-        
+
         private void initComponents(String properties) {
             setLayout(new BorderLayout());
             setOpaque(false);
@@ -351,7 +369,7 @@ class OverviewViewSupport {
             fileReaderWriter.close();
 
             JComponent contents;
-            
+
             if (properties != null) {
                 HTMLTextArea area = new HTMLTextArea("<nobr>" + properties + "</nobr>");    // NOI18N
                 area.setCaretPosition(0);
@@ -360,9 +378,9 @@ class OverviewViewSupport {
             } else {
                 contents = new NotSupportedDisplayer(NotSupportedDisplayer.JVM);
             }
-            
+
             add(new ScrollableContainer(contents), BorderLayout.CENTER);
         }
-        
-            }
-        }
+
+    }
+}
