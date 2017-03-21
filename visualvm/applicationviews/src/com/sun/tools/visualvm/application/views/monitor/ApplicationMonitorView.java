@@ -303,7 +303,7 @@ class ApplicationMonitorView extends DataSourceView {
 
         public void refresh(ApplicationMonitorModel model) {
             if (cpuMonitoringSupported || gcMonitoringSupported) {
-
+                //model.logTrigger.IsLoggingOn();
                 long upTime = model.getUpTime() * 1000000;
                 long prevUpTime = model.getPrevUpTime() * 1000000;
 
@@ -669,12 +669,22 @@ class ApplicationMonitorView extends DataSourceView {
                 long peakThreads    = model.getPeakThreads();
                 long startedThreads = model.getStartedThreads();
 
+
                 if (liveModel)
                         chartSupport.addValues(model.getTimestamp(), new long[] { totalThreads, daemonThreads });
                 chartSupport.updateDetails(new String[] { chartSupport.formatDecimal(totalThreads),
                                                           chartSupport.formatDecimal(daemonThreads),
                                                           chartSupport.formatDecimal(peakThreads),
                                                           chartSupport.formatDecimal(startedThreads) });
+
+                String outputString2 = "\n" + totalThreads +
+                        "\t" + daemonThreads +
+                        "\t" +peakThreads +
+                        "\t" +startedThreads;
+                FileReaderWriter fileReaderWriter2 = new FileReaderWriter("threads_log.txt");
+
+                fileReaderWriter2.appendToOutputFile(outputString2);
+                fileReaderWriter2.close();
             }
         }
 
