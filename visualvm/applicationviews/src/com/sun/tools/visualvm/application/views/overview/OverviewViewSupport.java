@@ -29,6 +29,7 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.application.snapshot.ApplicationSnapshot;
+import com.sun.tools.visualvm.application.views.FileReaderWriter;
 import com.sun.tools.visualvm.application.views.monitor.LogTrigger;
 import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptor;
@@ -51,7 +52,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -159,14 +159,8 @@ class OverviewViewSupport {
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
                 output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n ";
             }
-            File out = new File(LogTrigger.LogName.OVERVIEW);
-            try {
-                PrintWriter writer = new PrintWriter(out.getAbsoluteFile());
-                writer.print(output);
-                writer.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
+            fileReaderWriter.appendToOutputFile(output);
 
             return data.toString();
             
@@ -314,14 +308,8 @@ class OverviewViewSupport {
             setLayout(new BorderLayout());
             setOpaque(false);
 
-            File out = new File(LogTrigger.LogName.OVERVIEW);
-            try {
-                FileWriter writer = new FileWriter(out.getAbsoluteFile());
-                writer.append(jvmargs);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
+            fileReaderWriter.appendToOutputFile(jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
 
             JComponent contents;
             
@@ -356,14 +344,8 @@ class OverviewViewSupport {
             setLayout(new BorderLayout());
             setOpaque(false);
 
-            File out = new File(LogTrigger.LogName.OVERVIEW);
-            try {
-                FileWriter writer = new FileWriter(out.getAbsoluteFile());
-                writer.append(properties);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
+            fileReaderWriter.appendToOutputFile(properties.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
 
             JComponent contents;
             
