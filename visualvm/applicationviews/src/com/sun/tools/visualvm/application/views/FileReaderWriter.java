@@ -41,7 +41,6 @@ public class FileReaderWriter {
     }
 
     public void appendToOutputFile(String outputString) {
-        //TODO если открыть файл на запись и не закрыть до момента крэша, то сохранятся ли данные?
         try {
             fileWriter.append(outputString);
         } catch (IOException e) {

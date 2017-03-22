@@ -98,38 +98,6 @@ class ApplicationMonitorView extends DataSourceView {
         return model;
     }
 
-//    static void runLogging(String outputFileName) {
-//        fileReaderWriter = new FileReaderWriter(outputFileName);
-//
-//        if (getFileSize(new File(outputFileName)) == 0) {
-//            String logHeader = logTrigger.getLogHeader(outputFileName);
-//            fileReaderWriter.appendToOutputFile(logHeader);
-//        }
-//
-//        fileReaderWriter.appendToOutputFile(outputString);
-//        fileReaderWriter.close(); //TODO надо ли каждый раз закрывать?
-//    }
-
-//    /**
-//     * Returns current date and time.
-//     * @return current date and time.
-//     */
-//    private static Date getCurrentDateTime() {
-//        return new Date(System.currentTimeMillis());
-//    }
-//
-//    /**
-//     * Returns current date and time in milliseconds.
-//     * @return current date and time in milliseconds.
-//     */
-//    private static long getCurrentDateTimeInMilliSeconds() {
-//        return getCurrentDateTime().getTime();
-//    }
-
-//    private static long getFileSize(File file) {
-//        return file.length();
-//    }
-
     protected DataViewComponent createComponent() {
         final MasterViewSupport masterViewSupport = new MasterViewSupport(model);
         DataViewComponent dvc = new DataViewComponent(
