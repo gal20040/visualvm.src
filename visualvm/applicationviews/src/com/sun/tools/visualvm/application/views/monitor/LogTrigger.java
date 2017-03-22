@@ -134,7 +134,7 @@ public class LogTrigger implements ILogTrigger{
     void runLogging(FileReaderWriter fileReaderWriter, String outputFileName, String outputString) {
         fileReaderWriter = new FileReaderWriter(outputFileName);
 
-        if (getFileSize(new File(outputFileName)) == 0) {
+        if (getFileSize(new File(LogTrigger.directory + outputFileName)) == 0) {
             String logHeader = getLogHeader(outputFileName);
             fileReaderWriter.appendToOutputFile(logHeader);
         }
