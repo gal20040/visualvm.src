@@ -4,5 +4,5 @@ public interface ILogTrigger {
     boolean checkCPU(long cpuUsage);
     boolean checkMaxHeap(long maxHeap);
     boolean checkUsedHeap(long usedHeap);
-    boolean checkThreads(long threads);
+//    boolean checkThreads(long threads);
 }
