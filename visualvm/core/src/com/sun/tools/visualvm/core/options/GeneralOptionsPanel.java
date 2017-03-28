@@ -114,35 +114,35 @@ final class GeneralOptionsPanel extends JPanel {
         c.insets = new Insets(3, 0, 3, 0);
         add(monitoredHostPUnits, c);
         
-        threadsPLabel = new JLabel();
-        Mnemonics.setLocalizedText(threadsPLabel, NbBundle.getMessage(
-                                   GeneralOptionsPanel.class, "LBL_Threads")); // NOI18N
-        c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 2;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(3, 15, 3, 0);
-        add(threadsPLabel, c);
-
-        threadsPSpinner = new JExtendedSpinner();
-        threadsPLabel.setLabelFor(threadsPSpinner);
-        threadsPSpinner.setModel(new SpinnerNumberModel(1, 1, 99999, 1));
-        c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 2;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(3, 40, 3, 4);
-        add(threadsPSpinner, c);
-
-        threadsPUnits = new JLabel();
-        Mnemonics.setLocalizedText(threadsPUnits, NbBundle.getMessage(
-                                   GeneralOptionsPanel.class, "LBL_Sec")); // NOI18N
-        c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 2;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(3, 0, 3, 0);
-        add(threadsPUnits, c);
+//        threadsPLabel = new JLabel();
+//        Mnemonics.setLocalizedText(threadsPLabel, NbBundle.getMessage(
+//                                   GeneralOptionsPanel.class, "LBL_Threads")); // NOI18N
+//        c = new GridBagConstraints();
+//        c.gridx = 0;
+//        c.gridy = 2;
+//        c.anchor = GridBagConstraints.WEST;
+//        c.insets = new Insets(3, 15, 3, 0);
+//        add(threadsPLabel, c);
+//
+//        threadsPSpinner = new JExtendedSpinner();
+//        threadsPLabel.setLabelFor(threadsPSpinner);
+//        threadsPSpinner.setModel(new SpinnerNumberModel(1, 1, 99999, 1));
+//        c = new GridBagConstraints();
+//        c.gridx = 1;
+//        c.gridy = 2;
+//        c.anchor = GridBagConstraints.WEST;
+//        c.insets = new Insets(3, 40, 3, 4);
+//        add(threadsPSpinner, c);
+//
+//        threadsPUnits = new JLabel();
+//        Mnemonics.setLocalizedText(threadsPUnits, NbBundle.getMessage(
+//                                   GeneralOptionsPanel.class, "LBL_Sec")); // NOI18N
+//        c = new GridBagConstraints();
+//        c.gridx = 2;
+//        c.gridy = 2;
+//        c.anchor = GridBagConstraints.WEST;
+//        c.insets = new Insets(3, 0, 3, 0);
+//        add(threadsPUnits, c);
 
         monitoredDataPLabel = new JLabel();
         Mnemonics.setLocalizedText(monitoredDataPLabel, NbBundle.getMessage(
@@ -308,7 +308,7 @@ final class GeneralOptionsPanel extends JPanel {
         resetDNSAButton.setEnabled(true);
         monitoredHostPSpinner.setValue(preferences.getMonitoredHostPoll());
         monitoredDataPSpinner.setValue(preferences.getMonitoredDataPoll());
-        threadsPSpinner.setValue(preferences.getThreadsPoll());
+//        threadsPSpinner.setValue(preferences.getThreadsPoll());
         monitoredHostCSpinner.setValue(preferences.getMonitoredHostCache());
         monitoredDataCSpinner.setValue(preferences.getMonitoredDataCache());
     }
@@ -324,7 +324,7 @@ final class GeneralOptionsPanel extends JPanel {
         GlobalPreferences preferences = GlobalPreferences.sharedInstance();
         preferences.setMonitoredHostPoll((Integer) monitoredHostPSpinner.getValue());
         preferences.setMonitoredDataPoll((Integer) monitoredDataPSpinner.getValue());
-        preferences.setThreadsPoll((Integer) threadsPSpinner.getValue());
+//        preferences.setThreadsPoll((Integer) threadsPSpinner.getValue());
         preferences.setMonitoredHostCache((Integer) monitoredHostCSpinner.getValue());
         preferences.setMonitoredDataCache((Integer) monitoredDataCSpinner.getValue());
         preferences.store();
@@ -334,10 +334,11 @@ final class GeneralOptionsPanel extends JPanel {
         try {
             int mh = (Integer) monitoredHostPSpinner.getValue();
             int md = (Integer) monitoredDataPSpinner.getValue();
-            int th = (Integer) threadsPSpinner.getValue();
+//            int th = (Integer) threadsPSpinner.getValue();
             int mhc = (Integer) monitoredHostCSpinner.getValue();
             int mdc = (Integer) monitoredDataCSpinner.getValue();
-            return mh > 0 && md > 0 && th > 0 && mhc > 0 && mdc > 0;
+//            return mh > 0 && md > 0 && th > 0 && mhc > 0 && mdc > 0;
+            return mh > 0 && md > 0 && mhc > 0 && mdc > 0;
         } catch (Exception e) {
         }
         return false;
@@ -345,7 +346,7 @@ final class GeneralOptionsPanel extends JPanel {
 
     private void startTrackingChanges() {
         monitoredHostPSpinner.getModel().addChangeListener(changeListener);
-        threadsPSpinner.getModel().addChangeListener(changeListener);
+//        threadsPSpinner.getModel().addChangeListener(changeListener);
         monitoredDataPSpinner.getModel().addChangeListener(changeListener);
         monitoredHostCSpinner.getModel().addChangeListener(changeListener);
         monitoredDataCSpinner.getModel().addChangeListener(changeListener);
@@ -360,9 +361,9 @@ final class GeneralOptionsPanel extends JPanel {
     private JLabel monitoredHostPLabel;
     private JSpinner monitoredHostPSpinner;
     private JLabel monitoredHostPUnits;
-    private JLabel threadsPLabel;
-    private JSpinner threadsPSpinner;
-    private JLabel threadsPUnits;
+//    private JLabel threadsPLabel;
+//    private JSpinner threadsPSpinner;
+//    private JLabel threadsPUnits;
     private JLabel monitoredDataPLabel;
     private JSpinner monitoredDataPSpinner;
     private JLabel monitoredDataPUnits;
