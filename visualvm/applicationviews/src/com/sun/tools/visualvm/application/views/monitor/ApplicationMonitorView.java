@@ -121,10 +121,10 @@ class ApplicationMonitorView extends DataSourceView {
                 getMessage(ApplicationMonitorView.class, "LBL_Classes"), true), DataViewComponent.BOTTOM_LEFT);    // NOI18N
         dvc.addDetailsView(classesViewSupport.getDetailsView(), DataViewComponent.BOTTOM_LEFT);
 
-        final ThreadsViewSupport threadsViewSupport = new ThreadsViewSupport(model);
-        dvc.configureDetailsArea(new DataViewComponent.DetailsAreaConfiguration(NbBundle.
-                getMessage(ApplicationMonitorView.class, "LBL_Threads"), true), DataViewComponent.BOTTOM_RIGHT);   // NOI18N
-        dvc.addDetailsView(threadsViewSupport.getDetailsView(), DataViewComponent.BOTTOM_RIGHT);
+//        final ThreadsViewSupport threadsViewSupport = new ThreadsViewSupport(model);
+//        dvc.configureDetailsArea(new DataViewComponent.DetailsAreaConfiguration(NbBundle.
+//                getMessage(ApplicationMonitorView.class, "LBL_Threads"), true), DataViewComponent.BOTTOM_RIGHT);   // NOI18N
+//        dvc.addDetailsView(threadsViewSupport.getDetailsView(), DataViewComponent.BOTTOM_RIGHT);
 
         final Runnable refresher = new Runnable() {
             public void run() {
@@ -133,7 +133,7 @@ class ApplicationMonitorView extends DataSourceView {
                 heapViewSupport.refresh(model);
                 permGenViewSupport.refresh(model);
                 classesViewSupport.refresh(model);
-                threadsViewSupport.refresh(model);
+//                threadsViewSupport.refresh(model);
             }
         };
 
@@ -627,86 +627,86 @@ class ApplicationMonitorView extends DataSourceView {
 
     }
 
-    // --- Threads -------------------------------------------------------------
-
-    private static class ThreadsViewSupport extends JPanel  {
-
-        private static final String LIVE = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads");   // NOI18N
-        private static final String LIVE_LEG = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads_leg");   // NOI18N
-        private static final String DAEMON = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Daemon_threads");// NOI18N
-        private static final String DAEMON_LEG = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Daemon_threads_leg");// NOI18N
-        private static final String PEAK = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads_peak");  // NOI18N
-        private static final String STARTED = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Started_threads_total");   // NOI18N
-
-        private boolean liveModel;
-        private boolean threadsMonitoringSupported;
-
-        private SimpleXYChartSupport chartSupport;
-
-        public ThreadsViewSupport(ApplicationMonitorModel model) {
-            initModels(model);
-            initComponents(model);
-        }
-
-        public DataViewComponent.DetailsView getDetailsView() {
-            return new DataViewComponent.DetailsView(NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Threads"), null, 10, this, null);   // NOI18N
-        }
-
-        public void refresh(ApplicationMonitorModel model) {
-            if (threadsMonitoringSupported) {
-                long totalThreads   = model.getTotalThreads();
-                long daemonThreads  = model.getDeamonThreads();
-                long peakThreads    = model.getPeakThreads();
-                long startedThreads = model.getStartedThreads();
-
-
-                if (liveModel)
-                    chartSupport.addValues(model.getTimestamp(), new long[] { totalThreads, daemonThreads });
-                chartSupport.updateDetails(new String[] { chartSupport.formatDecimal(totalThreads),
-                        chartSupport.formatDecimal(daemonThreads),
-                        chartSupport.formatDecimal(peakThreads),
-                        chartSupport.formatDecimal(startedThreads) });
-
-                if (logTrigger.checkThreads(totalThreads)) {
-                    outputString = "\t" + totalThreads +
-                            "\t" + daemonThreads +
-                            "\t" + peakThreads +
-                            "\t" + startedThreads;
-                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.THREAD, outputString);
-                }
-            }
-        }
-
-        private void initModels(ApplicationMonitorModel model) {
-            liveModel = model.isLive();
-            threadsMonitoringSupported = model.isThreadsMonitoringSupported();
-
-            SimpleXYChartDescriptor chartDescriptor =
-                    SimpleXYChartDescriptor.decimal(3, false, model.getChartCache());
-
-            chartDescriptor.addLineItems(LIVE_LEG, DAEMON_LEG);
-            chartDescriptor.setDetailsItems(new String[] { LIVE, DAEMON,
-                    PEAK, STARTED });
-
-            chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
-            model.registerThreadsChartSupport(chartSupport);
-
-            chartSupport.setZoomingEnabled(!liveModel);
-        }
-
-        private void initComponents(ApplicationMonitorModel model) {
-            setLayout(new BorderLayout());
-            setOpaque(false);
-
-            if (model.isThreadsMonitoringSupported()) {
-                add(chartSupport.getChart(), BorderLayout.CENTER);
-                chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN });
-            } else {
-                add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
-                        BorderLayout.CENTER);
-            }
-        }
-
-    }
+//    // --- Threads -------------------------------------------------------------
+//
+//    private static class ThreadsViewSupport extends JPanel  {
+//
+//        private static final String LIVE = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads");   // NOI18N
+//        private static final String LIVE_LEG = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads_leg");   // NOI18N
+//        private static final String DAEMON = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Daemon_threads");// NOI18N
+//        private static final String DAEMON_LEG = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Daemon_threads_leg");// NOI18N
+//        private static final String PEAK = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Live_threads_peak");  // NOI18N
+//        private static final String STARTED = NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Started_threads_total");   // NOI18N
+//
+//        private boolean liveModel;
+//        private boolean threadsMonitoringSupported;
+//
+//        private SimpleXYChartSupport chartSupport;
+//
+//        public ThreadsViewSupport(ApplicationMonitorModel model) {
+//            initModels(model);
+//            initComponents(model);
+//        }
+//
+//        public DataViewComponent.DetailsView getDetailsView() {
+//            return new DataViewComponent.DetailsView(NbBundle.getMessage(ApplicationMonitorView.class, "LBL_Threads"), null, 10, this, null);   // NOI18N
+//        }
+//
+//        public void refresh(ApplicationMonitorModel model) {
+//            if (threadsMonitoringSupported) {
+//                long totalThreads   = model.getTotalThreads();
+//                long daemonThreads  = model.getDeamonThreads();
+//                long peakThreads    = model.getPeakThreads();
+//                long startedThreads = model.getStartedThreads();
+//
+//
+//                if (liveModel)
+//                    chartSupport.addValues(model.getTimestamp(), new long[] { totalThreads, daemonThreads });
+//                chartSupport.updateDetails(new String[] { chartSupport.formatDecimal(totalThreads),
+//                        chartSupport.formatDecimal(daemonThreads),
+//                        chartSupport.formatDecimal(peakThreads),
+//                        chartSupport.formatDecimal(startedThreads) });
+//
+//                if (logTrigger.checkThreads(totalThreads)) {
+//                    outputString = "\t" + totalThreads +
+//                            "\t" + daemonThreads +
+//                            "\t" + peakThreads +
+//                            "\t" + startedThreads;
+//                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.THREAD, outputString);
+//                }
+//            }
+//        }
+//
+//        private void initModels(ApplicationMonitorModel model) {
+//            liveModel = model.isLive();
+//            threadsMonitoringSupported = model.isThreadsMonitoringSupported();
+//
+//            SimpleXYChartDescriptor chartDescriptor =
+//                    SimpleXYChartDescriptor.decimal(3, false, model.getChartCache());
+//
+//            chartDescriptor.addLineItems(LIVE_LEG, DAEMON_LEG);
+//            chartDescriptor.setDetailsItems(new String[] { LIVE, DAEMON,
+//                    PEAK, STARTED });
+//
+//            chartSupport = ChartFactory.createSimpleXYChart(chartDescriptor);
+//            model.registerThreadsChartSupport(chartSupport);
+//
+//            chartSupport.setZoomingEnabled(!liveModel);
+//        }
+//
+//        private void initComponents(ApplicationMonitorModel model) {
+//            setLayout(new BorderLayout());
+//            setOpaque(false);
+//
+//            if (model.isThreadsMonitoringSupported()) {
+//                add(chartSupport.getChart(), BorderLayout.CENTER);
+//                chartSupport.updateDetails(new String[] { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN });
+//            } else {
+//                add(new NotSupportedDisplayer(NotSupportedDisplayer.JVM),
+//                        BorderLayout.CENTER);
+//            }
+//        }
+//
+//    }
 
 }
