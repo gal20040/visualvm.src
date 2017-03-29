@@ -55,16 +55,16 @@ final class CPUView extends JPanel {
     private boolean forceRefresh = false;
     
     private final CPUSamplerSupport.SnapshotDumper snapshotDumper;
-    private final CPUSamplerSupport.ThreadDumper threadDumper;
+//    private final CPUSamplerSupport.ThreadDumper threadDumper;
 
     private SampledLivePanel resultsPanel;
 
 
-    CPUView(AbstractSamplerSupport.Refresher refresher, CPUSamplerSupport.SnapshotDumper
-            snapshotDumper, CPUSamplerSupport.ThreadDumper threadDumper) {
+//    CPUView(AbstractSamplerSupport.Refresher refresher, CPUSamplerSupport.SnapshotDumper snapshotDumper, CPUSamplerSupport.ThreadDumper threadDumper) {
+    CPUView(AbstractSamplerSupport.Refresher refresher, CPUSamplerSupport.SnapshotDumper snapshotDumper) {
         this.refresher = refresher;
         this.snapshotDumper = snapshotDumper;
-        this.threadDumper = threadDumper;
+//        this.threadDumper = threadDumper;
         
         initComponents();
 
@@ -120,7 +120,7 @@ final class CPUView extends JPanel {
 //        refreshUnitsLabel.setEnabled(false);
         pauseButton.setEnabled(false);
         refreshButton.setEnabled(false);
-        threaddumpButton.setEnabled(false);
+//        threaddumpButton.setEnabled(false);
     }
 
 
@@ -196,20 +196,20 @@ final class CPUView extends JPanel {
         
         toolBar.addFiller();
 
-        threaddumpButton = new JButton(NbBundle.getMessage(CPUView.class, "LBL_Thread_dump")) { // NOI18N
-            protected void fireActionPerformed(ActionEvent event) {
-                threadDumper.takeThreadDump((event.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) == 0);
-            }
-        };
-        threaddumpButton.setToolTipText(NbBundle.getMessage(CPUView.class, "TOOLTIP_Thread_dump")); // NOI18N
-        threaddumpButton.setOpaque(false);
-        threaddumpButton.setEnabled(threadDumper != null);
-        toolBar.addItem(threaddumpButton);
+//        threaddumpButton = new JButton(NbBundle.getMessage(CPUView.class, "LBL_Thread_dump")) { // NOI18N
+//            protected void fireActionPerformed(ActionEvent event) {
+//                threadDumper.takeThreadDump((event.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) == 0);
+//            }
+//        };
+//        threaddumpButton.setToolTipText(NbBundle.getMessage(CPUView.class, "TOOLTIP_Thread_dump")); // NOI18N
+//        threaddumpButton.setOpaque(false);
+//        threaddumpButton.setEnabled(threadDumper != null);
+//        toolBar.addItem(threaddumpButton);
 
         int maxHeight = pauseButton.getPreferredSize().height;
         maxHeight = Math.max(maxHeight, refreshButton.getPreferredSize().height);
         maxHeight = Math.max(maxHeight, snapshotButton.getPreferredSize().height);
-        maxHeight = Math.max(maxHeight, threaddumpButton.getPreferredSize().height);
+//        maxHeight = Math.max(maxHeight, threaddumpButton.getPreferredSize().height);
 
         int width = pauseButton.getPreferredSize().width;
         Dimension size = new Dimension(maxHeight, maxHeight);
@@ -229,11 +229,11 @@ final class CPUView extends JPanel {
         snapshotButton.setPreferredSize(size);
         snapshotButton.setMaximumSize(size);
 
-        width = threaddumpButton.getPreferredSize().width;
-        size = new Dimension(width + 5, maxHeight);
-        threaddumpButton.setMinimumSize(size);
-        threaddumpButton.setPreferredSize(size);
-        threaddumpButton.setMaximumSize(size);
+//        width = threaddumpButton.getPreferredSize().width;
+//        size = new Dimension(width + 5, maxHeight);
+//        threaddumpButton.setMinimumSize(size);
+//        threaddumpButton.setPreferredSize(size);
+//        threaddumpButton.setMaximumSize(size);
 
         add(TransparentToolBar.withSeparator(toolBar), BorderLayout.NORTH);
         
@@ -249,7 +249,7 @@ final class CPUView extends JPanel {
     private AbstractButton snapshotButton;
     private AbstractButton pauseButton;
     private AbstractButton refreshButton;
-    private AbstractButton threaddumpButton;
+//    private AbstractButton threaddumpButton;
     private JLabel noDataLabel;
 
     

@@ -131,7 +131,7 @@ public abstract class CPUSamplerSupport extends AbstractSamplerSupport {
 
     public DataViewComponent.DetailsView[] getDetailsView() {
         if (detailsViews == null) {
-            cpuView = new CPUView(refresher, snapshotDumper, threadDumper);
+            cpuView = new CPUView(refresher, snapshotDumper); //cpuView = new CPUView(refresher, snapshotDumper, threadDumper);
             detailsViews = new DataViewComponent.DetailsView[threadsCPU != null ? 2:1];
             detailsViews[0] = new DataViewComponent.DetailsView(NbBundle.getMessage(
                 CPUSamplerSupport.class, "LBL_Cpu_samples"), null, 10, cpuView, null); // NOI18N
@@ -320,7 +320,7 @@ public abstract class CPUSamplerSupport extends AbstractSamplerSupport {
     }
     
     public static abstract class ThreadDumper {
-        public abstract void takeThreadDump(boolean openView);
+//        public abstract void takeThreadDump(boolean openView);
     }
 
     public static abstract class SnapshotDumper {
