@@ -38,15 +38,15 @@ import org.openide.util.NbBundle;
  * @author Jiri Sedlacek
  */
 public abstract class ThreadDump extends Snapshot {
-    
-    /**
-     * Creates new instance of ThreadDump with the data stored in a file.
-     * 
-     * @param file file where thread dump is saved.
-     */
-    public ThreadDump(File file) {
-        this(file, null);
-    }
+
+//    /**
+//     * Creates new instance of ThreadDump with the data stored in a file.
+//     *
+//     * @param file file where thread dump is saved.
+//     */
+//    public ThreadDump(File file) {
+//        this(file, null);
+//    }
     
     /**
      * Creates new instance of ThreadDump with the data stored in a file and defined master.

@@ -83,34 +83,34 @@ public final class ThreadDumpSupport {
         return JvmFactory.getJVMFor(application).isTakeThreadDumpSupported();
     }
     
-    /**
-     * Takes thread dump from Application.
-     * 
-     * @param application Application to take the thread dump,
-     * @param openView true if taken thread dump should be opened, false otherwise.
-     */
-    public void takeThreadDump(Application application, boolean openView) {
-        threadDumpProvider.createThreadDump(application, openView);
-    }
-    
-    /**
-     * Takes thread dump from CoreDump.
-     * 
-     * @param coreDump CoreDump to take the thread dump,
-     * @param openView true if taken thread dump should be opened, false otherwise.
-     */
-    public void takeThreadDump(CoreDump coreDump, boolean openView) {
-        threadDumpProvider.createThreadDump(coreDump, openView);
-    }
-    
-    /**
-     * Returns PluggableDataSourceViewProvider for thread dumps.
-     * 
-     * @return PluggableDataSourceViewProvider for thread dumps.
-     */
-    public PluggableDataSourceViewProvider<ThreadDump> getThreadDumpView() {
-        return threadDumpViewProvider;
-    }
+//    /**
+//     * Takes thread dump from Application.
+//     *
+//     * @param application Application to take the thread dump,
+//     * @param openView true if taken thread dump should be opened, false otherwise.
+//     */
+//    public void takeThreadDump(Application application, boolean openView) {
+//        threadDumpProvider.createThreadDump(application, openView);
+//    }
+
+//    /**
+//     * Takes thread dump from CoreDump.
+//     *
+//     * @param coreDump CoreDump to take the thread dump,
+//     * @param openView true if taken thread dump should be opened, false otherwise.
+//     */
+//    public void takeThreadDump(CoreDump coreDump, boolean openView) {
+//        threadDumpProvider.createThreadDump(coreDump, openView);
+//    }
+
+//    /**
+//     * Returns PluggableDataSourceViewProvider for thread dumps.
+//     *
+//     * @return PluggableDataSourceViewProvider for thread dumps.
+//     */
+//    public PluggableDataSourceViewProvider<ThreadDump> getThreadDumpView() {
+//        return threadDumpViewProvider;
+//    }
 
 
     private ThreadDumpSupport() {

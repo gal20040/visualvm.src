@@ -11,5 +11,9 @@
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="uisupport" />
     <orderEntry type="library" name="org-openide-util" level="project" />
+    <orderEntry type="module" module-name="coredump" />
+    <orderEntry type="module" module-name="tools" />
+    <orderEntry type="library" name="org-netbeans-api-progress" level="project" />
+    <orderEntry type="library" name="org-openide-modules" level="project" />
   </component>
 </module>
