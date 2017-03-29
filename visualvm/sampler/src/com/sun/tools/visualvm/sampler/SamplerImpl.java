@@ -484,7 +484,7 @@ final class SamplerImpl {
             public void run() {
                 ThreadInfoProvider ti = new ThreadInfoProvider(application);
                 final String status = ti.getStatus();
-                ThreadsCPU tcpu;
+                ThreadsCPU tcpu = null;
                 
                 if (status != null) {
                     SwingUtilities.invokeLater(new Runnable() {
@@ -522,12 +522,12 @@ final class SamplerImpl {
                         });
                     }
                 };
-                tcpu = new ThreadsCPU(ti.getThreadMXBean(), JmxModelFactory.getJmxModelFor(application).getMBeanServerConnection());
-                try {
-                    tcpu.getThreadsCPUInfo();
-                } catch (Exception ex) {
-                    tcpu = null;
-                }
+//                tcpu = new ThreadsCPU(ti.getThreadMXBean(), JmxModelFactory.getJmxModelFor(application).getMBeanServerConnection());
+//                try {
+//                    tcpu.getThreadsCPUInfo();
+//                } catch (Exception ex) {
+//                    tcpu = null;
+//                }
 
                 final ThreadDumpSupport tds = ThreadDumpSupport.getInstance();
                 final String noThreadDump = tds.supportsThreadDump(application) ? null : NbBundle.getMessage(

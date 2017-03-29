@@ -135,17 +135,17 @@ public abstract class CPUSamplerSupport extends AbstractSamplerSupport {
             detailsViews = new DataViewComponent.DetailsView[threadsCPU != null ? 2:1];
             detailsViews[0] = new DataViewComponent.DetailsView(NbBundle.getMessage(
                 CPUSamplerSupport.class, "LBL_Cpu_samples"), null, 10, cpuView, null); // NOI18N
-            if (threadsCPU != null) {
-                threadCPUView = new ThreadsCPUView(threadCPURefresher);
-                detailsViews[1] = new DataViewComponent.DetailsView(NbBundle.getMessage(
-                CPUSamplerSupport.class, "LBL_ThreadAlloc"), null, 20, threadCPUView, null); // NOI18N
-                
-            }
+//            if (threadsCPU != null) {
+//                threadCPUView = new ThreadsCPUView(threadCPURefresher);
+//                detailsViews[1] = new DataViewComponent.DetailsView(NbBundle.getMessage(
+//                CPUSamplerSupport.class, "LBL_ThreadAlloc"), null, 20, threadCPUView, null); // NOI18N
+//
+//            }
         }
         cpuView.initSession();
-        if (threadsCPU != null) {
-            threadCPUView.initSession();
-        }
+//        if (threadsCPU != null) {
+//            threadCPUView.initSession();
+//        }
         return detailsViews.clone();
     }
 
