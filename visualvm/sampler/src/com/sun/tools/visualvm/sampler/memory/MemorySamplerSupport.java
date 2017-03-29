@@ -51,7 +51,7 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
     
     private final Jvm jvm;
     private final MemoryMXBean memoryBean;
-    //private final ThreadsMemory threadsMemory;
+//    private final ThreadsMemory threadsMemory;
     private final HeapDumper heapDumper;
     private final SnapshotDumper snapshotDumper;
     
@@ -66,9 +66,9 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
     private Refresher permgenRefresher;
     private MemoryView permgenView;
     
-    private Timer threadAllocTimer;
-    private Refresher threadAllocRefresher;
-    private ThreadsMemoryView threadAllocView;
+//    private Timer threadAllocTimer;
+//    private Refresher threadAllocRefresher;
+//    private ThreadsMemoryView threadAllocView;
     
     private DataViewComponent.DetailsView[] detailsViews;
     
@@ -98,8 +98,8 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
         heapRefresher.setRefreshRate(samplingRate);
         if (permgenRefresher != null)
             permgenRefresher.setRefreshRate(samplingRate);
-        if (threadAllocRefresher != null)
-            threadAllocRefresher.setRefreshRate(samplingRate);
+//        if (threadAllocRefresher != null)
+//            threadAllocRefresher.setRefreshRate(samplingRate);
         if (heapView != null) {
             if (permgenView != null) doRefreshImpl(heapTimer, heapView, permgenView);
             else doRefreshImpl(heapTimer, heapView);
@@ -112,8 +112,8 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
         if (permgenTimer != null) {
             permgenTimer.stop();
         }
-        if (threadAllocTimer != null)
-            threadAllocTimer.stop();
+//        if (threadAllocTimer != null)
+//            threadAllocTimer.stop();
         if (heapView != null) {
             if (permgenView != null) doRefreshImplImpl(snapshotDumper.lastHistogram, heapView, permgenView);
             else doRefreshImplImpl(snapshotDumper.lastHistogram, heapView);
@@ -216,7 +216,7 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
         int detailIndex = 0;
         int detailsCount = 1;
         if (hasPermGenHisto) detailsCount++;
-        if (threadAllocRefresher != null) detailsCount++;
+//        if (threadAllocRefresher != null) detailsCount++;
         DataViewComponent.DetailsView[] details = new DataViewComponent.DetailsView[detailsCount];
 
         heapView = new MemoryView(heapRefresher, MemoryView.MODE_HEAP, memoryBean, snapshotDumper, heapDumper);
@@ -238,24 +238,24 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
         return details;
     }
     
-    private void doRefreshImpl(final Timer timer, final ThreadsMemoryView view) {
-        if (!timer.isRunning() || view.isPaused()) return;
-        
-//        try {
-//            processor.schedule(new TimerTask() {
-//                public void run() {
-//                    try {
-//                        if (!timer.isRunning()) return;
-//                        doRefreshImplImpl(threadsMemory.getThreadsMemoryInfo(), view);
-//                    } catch (Exception e) {
-//                        terminate();
-//                    }
-//                }
-//            }, 0);
-//        } catch (Exception e) {
-//            terminate();
-//        }
-    }
+//    private void doRefreshImpl(final Timer timer, final ThreadsMemoryView view) {
+//        if (!timer.isRunning() || view.isPaused()) return;
+//
+////        try {
+////            processor.schedule(new TimerTask() {
+////                public void run() {
+////                    try {
+////                        if (!timer.isRunning()) return;
+////                        doRefreshImplImpl(threadsMemory.getThreadsMemoryInfo(), view);
+////                    } catch (Exception e) {
+////                        terminate();
+////                    }
+////                }
+////            }, 0);
+////        } catch (Exception e) {
+////            terminate();
+////        }
+//    }
     
     private void doRefreshImpl(final Timer timer, final MemoryView... views) {
         if (!timer.isRunning() || (views.length == 1 && views[0].isPaused())) return;
@@ -286,13 +286,13 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
             });
     }
     
-    private void doRefreshImplImpl(final ThreadsMemoryInfo info, final ThreadsMemoryView view) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    view.refresh(info);
-                }
-            });
-    }
+//    private void doRefreshImplImpl(final ThreadsMemoryInfo info, final ThreadsMemoryView view) {
+//            SwingUtilities.invokeLater(new Runnable() {
+//                public void run() {
+//                    view.refresh(info);
+//                }
+//            });
+//    }
 
     public static abstract class HeapDumper {
         public abstract void takeHeapDump(boolean openView);

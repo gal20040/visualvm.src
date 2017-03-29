@@ -93,7 +93,7 @@ final class MemoryView extends JPanel {
 
     static final int MODE_HEAP = 1;
     static final int MODE_PERMGEN = 2;
-    static final int MODE_THREADALLOC = 3;
+//    static final int MODE_THREADALLOC = 3;
     
     private final int mode;
 
@@ -136,9 +136,9 @@ final class MemoryView extends JPanel {
         return pauseButton.isSelected() && !forceRefresh;
     }
 
-    boolean isEmpty() {
-        return resTableModel.getRowCount() == 0;
-    }
+//    boolean isEmpty() {
+//        return resTableModel.getRowCount() == 0;
+//    }
 
     void refresh(HeapHistogram histogram) {
         if (histogram == null || isPaused()) return;
@@ -665,13 +665,13 @@ final class MemoryView extends JPanel {
         maxHeight = Math.max(maxHeight, gcButton.getPreferredSize().height);
         maxHeight = Math.max(maxHeight, heapdumpButton.getPreferredSize().height);
 
-        int width = pauseButton.getPreferredSize().width;
+        int width;// = pauseButton.getPreferredSize().width;
         Dimension size = new Dimension(maxHeight, maxHeight);
         pauseButton.setMinimumSize(size);
         pauseButton.setPreferredSize(size);
         pauseButton.setMaximumSize(size);
 
-        width = refreshButton.getPreferredSize().width;
+//        width = refreshButton.getPreferredSize().width;
         size = new Dimension(maxHeight, maxHeight);
         refreshButton.setMinimumSize(size);
         refreshButton.setPreferredSize(size);

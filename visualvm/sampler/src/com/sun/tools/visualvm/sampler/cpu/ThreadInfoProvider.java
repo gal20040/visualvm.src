@@ -58,9 +58,9 @@ public final class ThreadInfoProvider {
         return status;
     }
 
-    public ThreadMXBean getThreadMXBean() {
-        return threadBean;
-    }
+//    public ThreadMXBean getThreadMXBean() {
+//        return threadBean;
+//    }
     
     private String initialize(Application application) {
         if (application.getState() != Stateful.STATE_AVAILABLE) {

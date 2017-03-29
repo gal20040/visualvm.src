@@ -26,7 +26,7 @@
 package com.sun.tools.visualvm.sampler;
 
 import com.sun.tools.visualvm.sampler.cpu.ThreadInfoProvider;
-import com.sun.tools.visualvm.sampler.cpu.ThreadsCPU;
+//import com.sun.tools.visualvm.sampler.cpu.ThreadsCPU;
 import com.sun.tools.visualvm.sampler.memory.MemorySettingsSupport;
 import com.sun.tools.visualvm.sampler.cpu.CPUSettingsSupport;
 import com.sun.tools.visualvm.application.Application;
@@ -47,7 +47,7 @@ import com.sun.tools.visualvm.profiling.presets.ProfilerPresets;
 import com.sun.tools.visualvm.profiling.snapshot.ProfilerSnapshot;
 import com.sun.tools.visualvm.sampler.cpu.CPUSamplerSupport;
 import com.sun.tools.visualvm.sampler.memory.MemorySamplerSupport;
-import com.sun.tools.visualvm.sampler.memory.ThreadsMemory;
+//import com.sun.tools.visualvm.sampler.memory.ThreadsMemory;
 import com.sun.tools.visualvm.threaddump.ThreadDumpSupport;
 import com.sun.tools.visualvm.tools.attach.AttachModel;
 import com.sun.tools.visualvm.tools.attach.AttachModelFactory;
@@ -484,7 +484,7 @@ final class SamplerImpl {
             public void run() {
                 ThreadInfoProvider ti = new ThreadInfoProvider(application);
                 final String status = ti.getStatus();
-                ThreadsCPU tcpu = null;
+//                ThreadsCPU tcpu = null;
                 
                 if (status != null) {
                     SwingUtilities.invokeLater(new Runnable() {
@@ -532,18 +532,20 @@ final class SamplerImpl {
                 final ThreadDumpSupport tds = ThreadDumpSupport.getInstance();
                 final String noThreadDump = tds.supportsThreadDump(application) ? null : NbBundle.getMessage(
                                             SamplerImpl.class, "MSG_Thread_dump_unsupported"); // NOI18N
-               final String noThreadCPU =  tcpu != null ? null : NbBundle.getMessage(
-                       SamplerImpl.class, "MSG_ThreadCPU_unsupported"); // NOI18N
-//
-                CPUSamplerSupport.ThreadDumper threadDumper = noThreadDump != null ? null :
-                    new CPUSamplerSupport.ThreadDumper() {
-                        public void takeThreadDump(boolean openView) {
-                            tds.takeThreadDump(application, openView);
-                        }
-                    };
+//               final String noThreadCPU =  tcpu != null ? null : NbBundle.getMessage(
+                final String noThreadCPU =  NbBundle.getMessage(
+                        SamplerImpl.class, "MSG_ThreadCPU_unsupported"); // NOI18N
+
+//                CPUSamplerSupport.ThreadDumper threadDumper = noThreadDump != null ? null :
+//                    new CPUSamplerSupport.ThreadDumper() {
+//                        public void takeThreadDump(boolean openView) {
+//                            tds.takeThreadDump(application, openView);
+//                        }
+//                    };
                     
-                cpuSampler = new CPUSamplerSupport(ti, tcpu, snapshotDumper, threadDumper) {
-                    protected Timer getTimer() { return SamplerImpl.this.getTimer(); }
+//                cpuSampler = new CPUSamplerSupport(ti, tcpu, snapshotDumper, threadDumper) {
+                cpuSampler = new CPUSamplerSupport(ti, snapshotDumper) {
+                        protected Timer getTimer() { return SamplerImpl.this.getTimer(); }
                 };
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
