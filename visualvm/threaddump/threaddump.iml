@@ -7,5 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="application" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="uisupport" />
+    <orderEntry type="library" name="org-openide-util" level="project" />
   </component>
 </module>
