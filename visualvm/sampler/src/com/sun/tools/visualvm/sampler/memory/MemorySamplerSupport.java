@@ -30,22 +30,17 @@ import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.core.options.GlobalPreferences;
 import com.sun.tools.visualvm.core.ui.components.DataViewComponent;
 import com.sun.tools.visualvm.sampler.AbstractSamplerSupport;
-import com.sun.tools.visualvm.sampler.AbstractSamplerSupport.Refresher;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.lang.management.MemoryMXBean;
-import java.util.Set;
-import java.util.TimerTask;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import org.netbeans.lib.profiler.common.ProfilingSettings;
 import org.netbeans.lib.profiler.results.memory.SampledMemoryResultsSnapshot;
 import org.openide.util.NbBundle;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.lang.management.MemoryMXBean;
+import java.util.Set;
+import java.util.TimerTask;
 
 /**
  *
@@ -56,7 +51,7 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
     
     private final Jvm jvm;
     private final MemoryMXBean memoryBean;
-    private final ThreadsMemory threadsMemory;
+    //private final ThreadsMemory threadsMemory;
     private final HeapDumper heapDumper;
     private final SnapshotDumper snapshotDumper;
     
@@ -77,10 +72,10 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
     
     private DataViewComponent.DetailsView[] detailsViews;
     
-    public MemorySamplerSupport(Jvm jvm, boolean hasPermGen, ThreadsMemory mem, MemoryMXBean memoryBean, SnapshotDumper snapshotDumper, HeapDumper heapDumper) {
+    public MemorySamplerSupport(Jvm jvm, boolean hasPermGen, /*ThreadsMemory mem,*/ MemoryMXBean memoryBean, SnapshotDumper snapshotDumper, HeapDumper heapDumper) {
         this.jvm = jvm;
         hasPermGenHisto = hasPermGen;
-        threadsMemory = mem;
+//        threadsMemory = mem;
         this.memoryBean = memoryBean;
         this.heapDumper = heapDumper;
         this.snapshotDumper = snapshotDumper;
@@ -191,30 +186,30 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
             };
         }
         
-        if (threadsMemory != null) {
-            threadAllocTimer = new Timer(defaultRefresh, new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    threadAllocRefresher.refresh();
-                }
-            });
-            threadAllocRefresher = new Refresher() {
-                public final boolean checkRefresh() {
-                    if (!threadAllocTimer.isRunning()) return false;
-                    return threadAllocView.isShowing();
-                }
-                public final void doRefresh() {
-                    doRefreshImpl(threadAllocTimer, threadAllocView);
-                }
-                public final void setRefreshRate(int refreshRate) {
-                    threadAllocTimer.setDelay(refreshRate);
-                    threadAllocTimer.setInitialDelay(refreshRate);
-                    threadAllocTimer.restart();
-                }
-                public final int getRefreshRate() {
-                    return threadAllocTimer.getDelay();
-                }
-            };
-        }
+//        if (threadsMemory != null) {
+//            threadAllocTimer = new Timer(defaultRefresh, new ActionListener() {
+//                public void actionPerformed(ActionEvent e) {
+//                    threadAllocRefresher.refresh();
+//                }
+//            });
+//            threadAllocRefresher = new Refresher() {
+//                public final boolean checkRefresh() {
+//                    if (!threadAllocTimer.isRunning()) return false;
+//                    return threadAllocView.isShowing();
+//                }
+//                public final void doRefresh() {
+//                    doRefreshImpl(threadAllocTimer, threadAllocView);
+//                }
+//                public final void setRefreshRate(int refreshRate) {
+//                    threadAllocTimer.setDelay(refreshRate);
+//                    threadAllocTimer.setInitialDelay(refreshRate);
+//                    threadAllocTimer.restart();
+//                }
+//                public final int getRefreshRate() {
+//                    return threadAllocTimer.getDelay();
+//                }
+//            };
+//        }
     }
     
     private DataViewComponent.DetailsView[] createViews() {
@@ -223,7 +218,7 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
         if (hasPermGenHisto) detailsCount++;
         if (threadAllocRefresher != null) detailsCount++;
         DataViewComponent.DetailsView[] details = new DataViewComponent.DetailsView[detailsCount];
-        
+
         heapView = new MemoryView(heapRefresher, MemoryView.MODE_HEAP, memoryBean, snapshotDumper, heapDumper);
         details[detailIndex++] = new DataViewComponent.DetailsView(
                     NbBundle.getMessage(MemorySamplerSupport.class, "LBL_Heap_histogram"), // NOI18N
@@ -234,32 +229,32 @@ public abstract class MemorySamplerSupport extends AbstractSamplerSupport {
                         NbBundle.getMessage(MemorySamplerSupport.class, "LBL_PermGen_histogram"), // NOI18N
                         null, 20, permgenView, null);
         }
-        if (threadAllocRefresher != null) {
-            threadAllocView = new ThreadsMemoryView(threadAllocRefresher, memoryBean, heapDumper);
-            details[detailIndex++] = new DataViewComponent.DetailsView(
-                    NbBundle.getMessage(MemorySamplerSupport.class, "LBL_ThreadAlloc"), // NOI18N
-                    null, 30, threadAllocView, null);
-        }
+//        if (threadAllocRefresher != null) {
+//            threadAllocView = new ThreadsMemoryView(threadAllocRefresher, memoryBean, heapDumper);
+//            details[detailIndex++] = new DataViewComponent.DetailsView(
+//                    NbBundle.getMessage(MemorySamplerSupport.class, "LBL_ThreadAlloc"), // NOI18N
+//                    null, 30, threadAllocView, null);
+//        }
         return details;
     }
     
     private void doRefreshImpl(final Timer timer, final ThreadsMemoryView view) {
         if (!timer.isRunning() || view.isPaused()) return;
         
-        try {
-            processor.schedule(new TimerTask() {
-                public void run() {
-                    try {
-                        if (!timer.isRunning()) return;
-                        doRefreshImplImpl(threadsMemory.getThreadsMemoryInfo(), view);
-                    } catch (Exception e) {
-                        terminate();
-                    }
-                }
-            }, 0);
-        } catch (Exception e) {
-            terminate();
-        }
+//        try {
+//            processor.schedule(new TimerTask() {
+//                public void run() {
+//                    try {
+//                        if (!timer.isRunning()) return;
+//                        doRefreshImplImpl(threadsMemory.getThreadsMemoryInfo(), view);
+//                    } catch (Exception e) {
+//                        terminate();
+//                    }
+//                }
+//            }, 0);
+//        } catch (Exception e) {
+//            terminate();
+//        }
     }
     
     private void doRefreshImpl(final Timer timer, final MemoryView... views) {

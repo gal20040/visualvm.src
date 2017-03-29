@@ -532,9 +532,9 @@ final class SamplerImpl {
                 final ThreadDumpSupport tds = ThreadDumpSupport.getInstance();
                 final String noThreadDump = tds.supportsThreadDump(application) ? null : NbBundle.getMessage(
                                             SamplerImpl.class, "MSG_Thread_dump_unsupported"); // NOI18N
-                final String noThreadCPU =  tcpu != null ? null : NbBundle.getMessage(
-                                            SamplerImpl.class, "MSG_ThreadCPU_unsupported"); // NOI18N
-
+               final String noThreadCPU =  tcpu != null ? null : NbBundle.getMessage(
+                       SamplerImpl.class, "MSG_ThreadCPU_unsupported"); // NOI18N
+//
                 CPUSamplerSupport.ThreadDumper threadDumper = noThreadDump != null ? null :
                     new CPUSamplerSupport.ThreadDumper() {
                         public void takeThreadDump(boolean openView) {
@@ -651,24 +651,24 @@ final class SamplerImpl {
                 }
 
                 MemoryMXBean memoryBean = null;
-                ThreadsMemory threadsMemory = null;
+//                ThreadsMemory threadsMemory = null;
                 JmxModel jmxModel = JmxModelFactory.getJmxModelFor(application);
                 if (jmxModel != null && jmxModel.getConnectionState() == JmxModel.ConnectionState.CONNECTED) {
                     JvmMXBeans mxbeans = JvmMXBeansFactory.getJvmMXBeans(jmxModel);
                     if (mxbeans != null) {
                         memoryBean = mxbeans.getMemoryMXBean();
-                        try {
-                            threadsMemory = new ThreadsMemory(mxbeans.getThreadMXBean(),jmxModel.getMBeanServerConnection());
-                            threadsMemory.getThreadsMemoryInfo();
-                        } catch (Exception ex) {
-                            threadsMemory = null;
-                        }
+//                        try {
+//                            threadsMemory = new ThreadsMemory(mxbeans.getThreadMXBean(),jmxModel.getMBeanServerConnection());
+//                            threadsMemory.getThreadsMemoryInfo();
+//                        } catch (Exception ex) {
+//                            threadsMemory = null;
+//                        }
                     }
                 }
                 final String noPerformGC = memoryBean == null ? NbBundle.getMessage(
                         SamplerImpl.class, "MSG_Gc_unsupported") : null; // NOI18N
-                final String noThreadMem = threadsMemory == null ? NbBundle.getMessage(
-                        SamplerImpl.class, "MSG_ThreadMemory_unsupported") : null; // NOI18N
+//                final String noThreadMem = threadsMemory == null ? NbBundle.getMessage(
+//                        SamplerImpl.class, "MSG_ThreadMemory_unsupported") : null; // NOI18N
 
                 final HeapDumpSupport hds = HeapDumpSupport.getInstance();
                 final boolean local = application.isLocalApplication();
@@ -730,14 +730,14 @@ final class SamplerImpl {
                             else hds.takeRemoteHeapDump(application, null, openView);
                         }
                     };
-                memorySampler = new MemorySamplerSupport(jvm, hasPermGenHisto, threadsMemory, memoryBean, snapshotDumper, heapDumper) {
+                memorySampler = new MemorySamplerSupport(jvm, hasPermGenHisto, /*threadsMemory,*/ memoryBean, snapshotDumper, heapDumper) {
                     protected Timer getTimer() { return SamplerImpl.this.getTimer(); }
                 };
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         String avail = NbBundle.getMessage(SamplerImpl.class,
                                                            "MSG_Available"); // NOI18N
-                        if (noPerformGC != null || noHeapDump != null || noThreadMem != null) {
+                        if (noPerformGC != null || noHeapDump != null /*|| noThreadMem != null*/) {
                             String[] msgs = new String[3];
                             int i = 0;
                             if (noHeapDump != null) {
@@ -746,9 +746,9 @@ final class SamplerImpl {
                             if (noPerformGC != null) {
                                 msgs[i++] = noPerformGC;
                             }
-                            if (noThreadMem != null) {
-                                msgs[i++] = noThreadMem;
-                            }
+//                            if (noThreadMem != null) {
+//                                msgs[i++] = noThreadMem;
+//                            }
                             if (i == 1) {
                                 avail = NbBundle.getMessage(SamplerImpl.class,
                                         "MSG_Available_details", msgs[0]); // NOI18N
