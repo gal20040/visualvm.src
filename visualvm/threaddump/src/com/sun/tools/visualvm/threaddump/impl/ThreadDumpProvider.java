@@ -26,27 +26,15 @@
 package com.sun.tools.visualvm.threaddump.impl;
 
 import com.sun.tools.visualvm.application.Application;
-//import com.sun.tools.visualvm.coredump.CoreDump;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
 import com.sun.tools.visualvm.core.datasupport.DataChangeEvent;
 import com.sun.tools.visualvm.core.datasupport.DataChangeListener;
-//import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.core.datasource.Storage;
 import com.sun.tools.visualvm.core.snapshot.Snapshot;
-//import com.sun.tools.visualvm.core.ui.DataSourceWindowManager;
 import com.sun.tools.visualvm.threaddump.ThreadDumpSupport;
-//import com.sun.tools.visualvm.tools.sa.SaModel;
-//import com.sun.tools.visualvm.tools.sa.SaModelFactory;
 import java.io.File;
-//import java.io.FileOutputStream;
-//import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
-//import javax.swing.SwingUtilities;
-//import org.netbeans.api.progress.ProgressHandle;
-//import org.netbeans.api.progress.ProgressHandleFactory;
-//import org.openide.ErrorManager;
-//import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 
 /**
@@ -56,85 +44,11 @@ import org.openide.util.RequestProcessor;
  */
 public class ThreadDumpProvider {
     
-//    public void createThreadDump(final Application application, final boolean openView) {
-//         RequestProcessor.getDefault().post(new Runnable() {
-//            public void run() {
-//                Jvm jvm = JvmFactory.getJVMFor(application);
-//                if (!jvm.isTakeThreadDumpSupported()) {
-//                    DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.
-//                            Message(NbBundle.getMessage(ThreadDumpProvider.class,
-//                            "MSG_Cannot_take_thread_dump_for_") + DataSourceDescriptorFactory. // NOI18N
-//                            getDescriptor(application).getName(), NotifyDescriptor.ERROR_MESSAGE));
-//                    return;
-//                }
-//
-//                ProgressHandle pHandle = null;
-//                try {
-//                    pHandle = ProgressHandleFactory.createHandle(NbBundle.getMessage(ThreadDumpProvider.class, "MSG_Creating_Thread_Dump"));     // NOI18N
-//                    pHandle.setInitialDelay(0);
-//                    pHandle.start();
-//                    try {
-//                        final ThreadDumpImpl threadDump = new ThreadDumpImpl(jvm.takeThreadDump(), application);
-//                        application.getRepository().addDataSource(threadDump);
-//                        if (openView) DataSource.EVENT_QUEUE.post(new Runnable() {
-//                            public void run() { DataSourceWindowManager.sharedInstance().openDataSource(threadDump); }
-//                        });
-//                    } catch (IOException ex) {
-//                        ErrorManager.getDefault().notify(ex);
-//                    }
-//                } finally {
-//                    final ProgressHandle pHandleF = pHandle;
-//                    SwingUtilities.invokeLater(new Runnable() {
-//                        public void run() { if (pHandleF != null) pHandleF.finish(); }
-//                    });
-//                }
-//            }
-//        });
-//    }
-    
-//    public void createThreadDump(final CoreDump coreDump, final boolean openView) {
-//        RequestProcessor.getDefault().post(new Runnable() {
-//            public void run() {
-//                ProgressHandle pHandle = null;
-//                try {
-//                    pHandle = ProgressHandleFactory.createHandle(NbBundle.getMessage(ThreadDumpProvider.class, "MSG_Creating_Thread_Dump"));     // NOI18N
-//                    pHandle.setInitialDelay(0);
-//                    pHandle.start();
-//                    File snapshotDir = coreDump.getStorage().getDirectory();
-//                    String name = ThreadDumpSupport.getInstance().getCategory().createFileName();
-//                    File dumpFile = new File(snapshotDir,name);
-//                    SaModel saAget = SaModelFactory.getSAAgentFor(coreDump);
-//                    String dump = saAget.takeThreadDump();
-//                    if (dump != null) {
-//                        try {
-//                            OutputStream os = new FileOutputStream(dumpFile);
-//                            os.write(dump.getBytes("UTF-8"));    // NOI18N
-//                            os.close();
-//                            final ThreadDumpImpl threadDump = new ThreadDumpImpl(dumpFile, coreDump);
-//                            coreDump.getRepository().addDataSource(threadDump);
-//                            if (openView) DataSource.EVENT_QUEUE.post(new Runnable() {
-//                                public void run() { DataSourceWindowManager.sharedInstance().openDataSource(threadDump); }
-//                            });
-//                        } catch (Exception ex) {
-//                            ErrorManager.getDefault().notify(ex);
-//                        }
-//                    }
-//                } finally {
-//                    final ProgressHandle pHandleF = pHandle;
-//                    SwingUtilities.invokeLater(new Runnable() {
-//                        public void run() { if (pHandleF != null) pHandleF.finish(); }
-//                    });
-//                }
-//            }
-//        });
-//    }
-
     public void initialize() {
         DataSourceRepository.sharedInstance().addDataChangeListener(new SnapshotListener(), Snapshot.class);
         DataSourceRepository.sharedInstance().addDataChangeListener(new ApplicationListener(), Application.class);
     }
-    
-    
+
     private void processNewSnapshot(Snapshot snapshot) {
         if (snapshot instanceof ThreadDumpImpl) return;
         File snapshotFile = snapshot.getFile();
@@ -158,7 +72,6 @@ public class ThreadDumpProvider {
         }
     }
     
-    
     private class SnapshotListener implements DataChangeListener<Snapshot> {
         
         public void dataChanged(DataChangeEvent<Snapshot> event) {
@@ -169,7 +82,6 @@ public class ThreadDumpProvider {
                 }
             });
         }
-        
     }
     
     private class ApplicationListener implements DataChangeListener<Application> {
@@ -182,7 +94,5 @@ public class ThreadDumpProvider {
                 }
             });
         }
-        
     }
-    
 }

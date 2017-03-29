@@ -7,5 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="application" />
+    <orderEntry type="module" module-name="tools" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="heapdump" />
+    <orderEntry type="module" module-name="host" />
+    <orderEntry type="module" module-name="threaddump" />
   </component>
 </module>

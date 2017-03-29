@@ -7,5 +7,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="host" />
+    <orderEntry type="module" module-name="application" />
+    <orderEntry type="module" module-name="tools" />
+    <orderEntry type="library" name="org-openide-util" level="project" />
+    <orderEntry type="library" name="org-openide-windows" level="project" />
+    <orderEntry type="library" name="org-openide-awt" level="project" />
   </component>
 </module>
