@@ -164,10 +164,6 @@ final class ApplicationMonitorModel {
     private SimpleXYChartSupport classesChartSupport;
     private SimpleXYChartSupport threadsChartSupport;
 
-//    //#ilya/
-//    public LogTrigger logTrigger = new LogTrigger();
-//    //ilya/
-
     public static ApplicationMonitorModel create(Application application, boolean live) {
         return new ApplicationMonitorModel(application, live);
     }
@@ -190,7 +186,6 @@ final class ApplicationMonitorModel {
     public boolean isGcMonitoringSupported() { return gcMonitoringSupported; }
     public boolean isMemoryMonitoringSupported() { return memoryMonitoringSupported; }
     public boolean isClassMonitoringSupported() { return classMonitoringSupported; }
-    public boolean isThreadsMonitoringSupported() { return threadsMonitoringSupported; }
     public int     getProcessorsCount() { return processorsCount; }
     
     public long    getTimestamp() { return timestamp; }
@@ -213,12 +208,7 @@ final class ApplicationMonitorModel {
     public long getTotalUnloaded() { return totalUnloaded; }
     public long getSharedLoaded() { return sharedLoaded; }
     public long getTotalLoaded() { return totalLoaded; }
-    public long getTotalThreads() { return totalThreads; }
-    public long getDeamonThreads() { return daemonThreads; }
-    public long getPeakThreads() { return peakThreads; }
-    public long getStartedThreads() { return startedThreads; }
-    
-    
+
     public synchronized void initialize() {
         if (initialized) return;
         initialized = true;
@@ -270,17 +260,6 @@ final class ApplicationMonitorModel {
             });
     }
 
-    public void registerThreadsChartSupport(final SimpleXYChartSupport threadsChartSupport) {
-        this.threadsChartSupport = threadsChartSupport;
-        if (threadsChartSupport != null && source instanceof Snapshot)
-            RequestProcessor.getDefault().post(new Runnable() {
-                public void run() {
-                    File file = new File(source.getStorage().getDirectory(), THREADS_CHART_STORAGE);
-                    if (file.isFile()) loadChartSupport(threadsChartSupport, file);
-                }
-            });
-    }
-
     public synchronized void cleanup() {
         listeners.clear();
         if (!initialized) return;
@@ -297,7 +276,6 @@ final class ApplicationMonitorModel {
         if (live) listeners.remove(listener);
     }
 
-    
     public void save(Snapshot snapshot) {
         
         initialize();
@@ -559,5 +537,4 @@ final class ApplicationMonitorModel {
 
         listeners = Collections.synchronizedList(new ArrayList());
     }
-
 }
