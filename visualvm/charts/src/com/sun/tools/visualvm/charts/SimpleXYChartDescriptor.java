@@ -325,6 +325,8 @@ public final class SimpleXYChartDescriptor {
                                     NumberFormat customFormat,
                                     int valuesBuffer) {
 
+        valuesBuffer = 90; //value in seconds for durability of chart datas on Monitor tab
+
         this.chartType = chartType;
         this.minValue = minValue;
         this.maxValue = maxValue;
