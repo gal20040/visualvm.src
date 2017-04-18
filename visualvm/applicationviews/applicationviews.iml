@@ -11,5 +11,9 @@
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="uisupport" />
     <orderEntry type="library" name="openide-4.0" level="project" />
+    <orderEntry type="module" module-name="charts" />
+    <orderEntry type="module" module-name="heapdump" />
+    <orderEntry type="library" name="org-openide-util" level="project" />
+    <orderEntry type="module" module-name="tools" />
   </component>
 </module>
