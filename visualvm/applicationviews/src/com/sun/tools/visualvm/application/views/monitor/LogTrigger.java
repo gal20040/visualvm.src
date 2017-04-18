@@ -12,9 +12,8 @@ public class LogTrigger implements ILogTrigger{
     private long cpu;
     private long maxHeap;
     private long heapUsed;
-//    private long threads;
     private final int statesNumber = 5;
-    private boolean[] state = new boolean[statesNumber]; //new boolean[6];
+    private boolean[] state = new boolean[statesNumber];
     public static String directory;
 
     LogTrigger(){
@@ -31,7 +30,6 @@ public class LogTrigger implements ILogTrigger{
                 maxHeap = Long.parseLong(reader.readLine());
                 heapUsed = Long.parseLong(reader.readLine());
                 reader.readLine(); //Classes
-//                threads = Long.parseLong(reader.readLine());
             }
         } catch (IOException e) {
             System.out.println(e.getMessage() + " file '" + LogName.CONFIG + "' is missing");
@@ -43,7 +41,6 @@ public class LogTrigger implements ILogTrigger{
         public static final String CPU = "cpu_log.txt";
         public static final String HEAP = "heap_log.txt";
         public static final String CLASS = "class_log.txt";
-//        public static final String THREAD = "thread_log.txt";
         public static final String OVERVIEW = "overview_log.txt";
         public static final String CONFIG = "log.config";
     }
@@ -84,21 +81,9 @@ public class LogTrigger implements ILogTrigger{
         else return false;
     }
 
-//    @Override
-//    public boolean checkThreads(long threads) {
-//        if (commonLogging){
-//            if (this.threads != -1) {
-//                state[3] = threads >= this.threads;
-//                stateLogging = isLoggingOn();
-//            }
-//            return stateLogging;
-//        }
-//        else return false;
-//    }
-
     public boolean isLoggingOn(){
         return state[0] || state[1] || state[2] || state[3] || state[4];
-    } //|| state[5]
+    }
 
     private String getLogHeader(String outputFileName) {
         String logHeader = "Date/time" +
@@ -123,12 +108,6 @@ public class LogTrigger implements ILogTrigger{
                     "\t" + "Max heap";
         else if (outputFileName.equals(LogName.OVERVIEW))
             logHeader = "";
-//        else if (outputFileName.equals(LogName.THREAD))
-//            logHeader = logHeader +
-//                    "\t" + "Total threads" +
-//                    "\t" + "Daemon threads" +
-//                    "\t" + "Peak threads" +
-//                    "\t" + "Started threads";
         return logHeader;
     }
 
