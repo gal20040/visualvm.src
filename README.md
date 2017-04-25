@@ -2,7 +2,7 @@
 The presented project is academic project.
 Original repository is located at https://github.com/visualvm/visualvm.src. Original documentation is located at https://visualvm.github.io
 
-# VisualVM (master) sources repository
+# VisualVM sources repository
 
 VisualVM is a visual tool integrating commandline JDK tools and lightweight profiling capabilities. See https://visualvm.github.io for details and downloads.
 
