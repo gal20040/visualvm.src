@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-sendopts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-sendopts.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

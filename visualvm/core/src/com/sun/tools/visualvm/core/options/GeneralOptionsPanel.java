@@ -292,7 +292,7 @@ final class GeneralOptionsPanel extends JPanel {
     }
 
     private void resetDNSAButtonAction() {
-        ProfilerIDESettings.getInstance().clearDoNotShowAgainMap();
+//        ProfilerIDESettings.getInstance().clearDoNotShowAgainMap();
         resetDNSAButton.setEnabled(false);
     }
 

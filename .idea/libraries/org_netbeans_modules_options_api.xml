@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-options-api">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-options-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

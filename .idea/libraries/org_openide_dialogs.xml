@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-openide-dialogs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-dialogs.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

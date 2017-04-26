@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="org-jdesktop-layout">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-jdesktop-layout.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="jar://$PROJECT_DIR$/lib/org-jdesktop-layout.jar!/" recursive="false" />
+  </library>
+</component>

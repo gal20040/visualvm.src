@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org-netbeans-modules-profiler">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-netbeans-modules-profiler.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -164,7 +164,10 @@ final class ApplicationMonitorModel {
     private SimpleXYChartSupport classesChartSupport;
     private SimpleXYChartSupport threadsChartSupport;
 
-    
+//    //#ilya/
+//    public LogTrigger logTrigger = new LogTrigger();
+//    //ilya/
+
     public static ApplicationMonitorModel create(Application application, boolean live) {
         return new ApplicationMonitorModel(application, live);
     }
