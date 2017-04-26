@@ -29,7 +29,6 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.application.snapshot.ApplicationSnapshot;
-import com.sun.tools.visualvm.application.views.FileReaderWriter;
 import com.sun.tools.visualvm.application.views.monitor.LogTrigger;
 import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.core.datasource.descriptor.DataSourceDescriptor;
@@ -65,6 +64,7 @@ import java.util.List;
  * @author Tomas Hurka
  */
 class OverviewViewSupport {
+    private static LogTrigger logTrigger = new LogTrigger();
 
     // --- General data --------------------------------------------------------
 
@@ -178,9 +178,7 @@ class OverviewViewSupport {
                 data.append("<b>"+HEAP_DUMP_OOME+":</b> " + model.oomeEnabled() + "<br>");  // NOI18N
                 output+=HEAP_DUMP_OOME+": " + model.oomeEnabled() + "\n\n";
             }
-            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
-            fileReaderWriter.appendToOutputFile(output);
-            fileReaderWriter.close();
+            logTrigger.runLogging(LogTrigger.LogName.OVERVIEW, output);
 
             return data.toString();
         }
@@ -327,10 +325,9 @@ class OverviewViewSupport {
             setLayout(new BorderLayout());
             setOpaque(false);
 
-            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
-            fileReaderWriter.appendToOutputFile("   JVM Arguments: \n");
-            fileReaderWriter.appendToOutputFile(jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n")+"\n\n");
-            fileReaderWriter.close();
+            String output = "   JVM Arguments: \n"
+                    + jvmargs.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n")+"\n\n";
+            logTrigger.runLogging(LogTrigger.LogName.OVERVIEW, output);
 
             JComponent contents;
 
@@ -365,10 +362,9 @@ class OverviewViewSupport {
             setLayout(new BorderLayout());
             setOpaque(false);
 
-            FileReaderWriter fileReaderWriter = new FileReaderWriter(LogTrigger.LogName.OVERVIEW);
-            fileReaderWriter.appendToOutputFile("   System Properties : \n");
-            fileReaderWriter.appendToOutputFile(properties.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n"));
-            fileReaderWriter.close();
+            String output = "   System Properties : \n"
+                    + properties.replace("<b>", "-").replace("</b>=", " : ").replace("<br>", "\n");
+            logTrigger.runLogging(LogTrigger.LogName.OVERVIEW, output);
 
             JComponent contents;
 
