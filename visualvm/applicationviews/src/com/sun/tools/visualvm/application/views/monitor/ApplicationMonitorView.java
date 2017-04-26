@@ -26,7 +26,6 @@
 package com.sun.tools.visualvm.application.views.monitor;
 
 import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.application.views.FileReaderWriter;
 import com.sun.tools.visualvm.core.datasupport.DataRemovedListener;
 import com.sun.tools.visualvm.charts.ChartFactory;
 import com.sun.tools.visualvm.charts.SimpleXYChartDescriptor;
@@ -74,7 +73,6 @@ class ApplicationMonitorView extends DataSourceView {
     private final ApplicationMonitorModel model;
 
     private static LogTrigger logTrigger = new LogTrigger();
-    private static FileReaderWriter fileReaderWriter;
     private static String outputString;
 
     public ApplicationMonitorView(ApplicationMonitorModel model) {
@@ -347,7 +345,7 @@ class ApplicationMonitorView extends DataSourceView {
                                 "\t" + gcUsage +
                                 "\t" + cpuDetail +
                                 "\t" + gcDetail;
-                        logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.CPU, outputString);
+                        logTrigger.runLogging(LogTrigger.LogName.CPU, outputString);
                     }
                 }
             }
@@ -422,7 +420,7 @@ class ApplicationMonitorView extends DataSourceView {
                     outputString = "\t" + heapCapacity +
                             "\t" + heapUsed +
                             "\t" + maxHeap;
-                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.HEAP, outputString);
+                    logTrigger.runLogging(LogTrigger.LogName.HEAP, outputString);
                 }
             }
         }
@@ -582,7 +580,7 @@ class ApplicationMonitorView extends DataSourceView {
                             "\t" + sharedClasses +
                             "\t" + totalUnloaded +
                             "\t" + sharedUnloaded;
-                    logTrigger.runLogging(fileReaderWriter, LogTrigger.LogName.CLASS, outputString);
+                    logTrigger.runLogging(LogTrigger.LogName.CLASS, outputString);
                 }
             }
         }
@@ -618,4 +616,6 @@ class ApplicationMonitorView extends DataSourceView {
         }
 
     }
+}
+
 }
