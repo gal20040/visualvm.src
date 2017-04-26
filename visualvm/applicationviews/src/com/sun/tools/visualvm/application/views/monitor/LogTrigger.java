@@ -16,7 +16,7 @@ public class LogTrigger implements ILogTrigger{
     private boolean[] state = new boolean[6];
     public static String directory;
 
-    LogTrigger(){
+    public LogTrigger(){
         File config = new File(LogName.CONFIG);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(config.getAbsoluteFile()));
@@ -54,7 +54,7 @@ public class LogTrigger implements ILogTrigger{
                 state[0] = cpuUsage >= cpu;
                 stateLogging = isLoggingOn();
             }
-                return stateLogging;
+            return stateLogging;
         }
         else return false;
     }
@@ -131,8 +131,8 @@ public class LogTrigger implements ILogTrigger{
         return logHeader;
     }
 
-    void runLogging(FileReaderWriter fileReaderWriter, String outputFileName, String outputString) {
-        fileReaderWriter = new FileReaderWriter(outputFileName);
+    public void runLogging(String outputFileName, String outputString) {
+        FileReaderWriter fileReaderWriter = new FileReaderWriter(outputFileName);
 
         if (getFileSize(new File(LogTrigger.directory + outputFileName)) == 0) {
             String logHeader = getLogHeader(outputFileName);
